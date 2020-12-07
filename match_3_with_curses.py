@@ -2,22 +2,36 @@ import numpy as np
 import collections
 import random
 import time
+import curses
 
 class Game:
     score = 0
     game_grid = []
     possible_move_positions = []
+    game_over = False
     board_horizontal_matches = []
     board_vertical_matches = []
-    
+    game_window = curses.initscr()
     def init_board(self):
         # generate a 2D array with values between 1 and k
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
-                
+        
+        # global score
+        
         init_board = np.random.randint(1, 4, size=(5, 5))
+        # self.game_grid = np.array([[1, 1, 3, 2, 1],
+        #                             [1, 3, 2, 3, 3],
+        #                             [2, 3, 1, 3, 1],
+        #                             [1, 1, 2, 1, 1],
+        #                             [1, 1, 3, 2, 3]])
         self.game_grid = self.validate_board(init_board)
-        print("Generated Board : ")
-        print(self.game_grid)
+        
+        # print("Generated Board : ")
+        self.game_window.addstr(0,0, "Match-three Game Board")
+        self.game_window.addstr(1,0, str(self.game_grid))
+        self.game_window.refresh()
+        time.sleep(2)
+        # print(self.game_grid)
         self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
         self.input_tiles()   
 
@@ -111,10 +125,12 @@ class Game:
         return self.possible_move_positions
 
     def input_tiles(self):
-        # move = self.possible_move_positions.pop() #pop the last pair of co-ordinates from the possible moves for swap
-        move = random.choice(self.possible_move_positions)
+        move = self.possible_move_positions.pop() #pop the last pair of co-ordinates from the possible moves for swap
         (coord1, coord2) = move
-        print("One move taken from possible moves: ", coord1, coord2)
+        self.game_window.addstr(len(self.game_grid)+1,0, "One move taken from possible moves: " + str((coord1, coord2)))
+        # self.game_window.refresh()
+        time.sleep(2)
+        # print("One move taken from possible moves: ", coord1, coord2)
         is_valid_move = self.validate_move(coord1, coord2)
         if is_valid_move:
             self.swap_tiles(coord1, coord2)
@@ -149,8 +165,11 @@ class Game:
         # corresponding rows and columns
         
         self.game_grid[coord1[0]][coord1[1]], self.game_grid[coord2[0]][coord2[1]] = self.game_grid[coord2[0]][coord2[1]], self.game_grid[coord1[0]][coord1[1]]
-        print("Board after swapping the tiles:")
-        print(self.game_grid)
+        # print("Board after swapping the tiles:")
+        self.game_window.addstr(1,0, str(self.game_grid))
+        self.game_window.refresh()
+        time.sleep(2)
+        # print(self.game_grid)
         horizontal_matches = []
         vertical_matches = []
         if coord1[1] == coord2[1]:  # if vertical swap is performed
@@ -249,8 +268,11 @@ class Game:
                             matched_cells[row].append(col)
                     else:
                         matched_cells[row]=[col]
-        print("Matched tiles removed :")
-        print(self.game_grid)
+        # print("Matched tiles removed :")
+        self.game_window.addstr(1,0, str(self.game_grid))
+        self.game_window.refresh()
+        time.sleep(2)
+        # print(self.game_grid)
         matched_cells = collections.OrderedDict(sorted(matched_cells.items()))
 
         for matched_cell in matched_cells:
@@ -261,28 +283,52 @@ class Game:
                     else:
                         self.game_grid[i][cell] = self.game_grid[i - 1][cell]
 
-        print("Tiles above removed tiles moved down :")
-        print(self.game_grid)
+        # print("Tiles above removed tiles moved down :")
+        self.game_window.addstr(1,0, str(self.game_grid))
+        self.game_window.refresh()
+        time.sleep(2)
+        # print(self.game_grid)
         self.distribute_new_tiles()
+
         
     def distribute_new_tiles(self):
+        # print("New tiles distribution")
+        # for i in range(len(self.game_grid)):
+        #     for j in range(len(self.game_grid[0])):
+        #         if (self.game_grid[i][j] == 0):
+        #             self.game_grid[i][j] = random.randint(1, 3)
         new_arr = np.argwhere(self.game_grid == 0)
         for i in new_arr:
             self.game_grid[i[0]][i[1]] = random.randint(1, 3)
         
-        print("Score : ", self.score)
-        print("Tiles added:")
-        print(self.game_grid)
+        # print("Score : ", self.score)
+        self.game_window.addstr(len(self.game_grid)+2,0, "Score : " + str(self.score))
+        # print("Tiles added:")
+        self.game_window.addstr(1,0, str(self.game_grid))
+        self.game_window.refresh()
+        time.sleep(2)
+        # print(self.game_grid)
         
         avalanche = self.check_matches(self.game_grid, True)
         if avalanche:
-            print("Avalanche matches!")
+            self.game_window.addstr(len(self.game_grid)+1,0, "Avalanche matches!")
+            self.game_window.refresh()
+            # print("Avalanche matches!")
+        if (self.board_horizontal_matches or self.board_vertical_matches):
             self.shift_tiles(self.board_horizontal_matches, self.board_vertical_matches)
         else:
-            self.game_grid = self.validate_board(self.game_grid)
-            time.sleep(2)
+            # continue_game = input("Do you want to continue?(Y/N)").lower()
+            # if "y" in continue_game:
+            #     print("continue_game : ", continue_game)
+            #     self.game_over = False
+                # self.game_grid = self.validate_board(self.game_grid)
+            
             self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
             self.input_tiles()
+            # else:
+            #     self.game_over = True
+            #     print("Game Over!")
+            #     print("Your score is ", self.score)
         
     def add_score(self, removed_tiles):
         self.score += len(removed_tiles)
@@ -291,6 +337,8 @@ class Game:
     def validate_move(self, coord1, coord2):
         if ([coord1[0], coord1[1]], [coord2[0], coord2[1]]) or ([coord2[0], coord2[1]], [coord1[0], coord1[1]]) in self.possible_move_positions:
             return True
+    curses.endwin()
+    # quit()
 
 if __name__ == "__main__":
     g = Game()
