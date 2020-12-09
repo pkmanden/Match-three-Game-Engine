@@ -9,12 +9,16 @@ class Game:
     possible_move_positions = []
     board_horizontal_matches = []
     board_vertical_matches = []
-    
+
+    # grid size and range of colors
+    grid_size = 5, 5
+    color_start_range = 1
+    color_end_range = 4
+
     def init_board(self):
-        # generate a 2D array with values between 1 and k
+        # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
-                
-        init_board = np.random.randint(1, 4, size=(5, 5))
+        init_board = np.random.randint(self.color_start_range, self.color_end_range, size=self.grid_size)
         self.game_grid = self.validate_board(init_board)
         print("Generated Board : ")
         print(self.game_grid)
@@ -31,7 +35,7 @@ class Game:
     def shuffle_board(self, board):
         board = board.ravel()
         np.random.shuffle(board)
-        board = board.reshape(5,5)
+        board = board.reshape(self.grid_size)
         return board
     
     def check_matches(self, board, get_matches_flag):
@@ -268,7 +272,7 @@ class Game:
     def distribute_new_tiles(self):
         new_arr = np.argwhere(self.game_grid == 0)
         for i in new_arr:
-            self.game_grid[i[0]][i[1]] = random.randint(1, 3)
+            self.game_grid[i[0]][i[1]] = random.randint(self.color_start_range, self.color_end_range)
         
         print("Score : ", self.score)
         print("Tiles added:")

@@ -12,13 +12,19 @@ class Game:
     board_horizontal_matches = []
     board_vertical_matches = []
     game_window = curses.initscr()
+
+    # grid size and range of colors
+    grid_size = 5, 5
+    color_start_range = 1
+    color_end_range = 4
+
     def init_board(self):
-        # generate a 2D array with values between 1 and k
+        # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
         
         # global score
         
-        init_board = np.random.randint(1, 4, size=(5, 5))
+        init_board = np.random.randint(self.color_start_range, self.color_end_range, size=self.grid_size)
         # self.game_grid = np.array([[1, 1, 3, 2, 1],
         #                             [1, 3, 2, 3, 3],
         #                             [2, 3, 1, 3, 1],
@@ -30,7 +36,6 @@ class Game:
         self.game_window.addstr(0,0, "Match-three Game Board")
         self.game_window.addstr(1,0, str(self.game_grid))
         self.game_window.refresh()
-        time.sleep(2)
         # print(self.game_grid)
         self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
         self.input_tiles()   
@@ -45,7 +50,7 @@ class Game:
     def shuffle_board(self, board):
         board = board.ravel()
         np.random.shuffle(board)
-        board = board.reshape(5,5)
+        board = board.reshape(self.grid_size)
         return board
     
     def check_matches(self, board, get_matches_flag):
@@ -127,6 +132,7 @@ class Game:
     def input_tiles(self):
         move = self.possible_move_positions.pop() #pop the last pair of co-ordinates from the possible moves for swap
         (coord1, coord2) = move
+        
         self.game_window.addstr(len(self.game_grid)+1,0, "One move taken from possible moves: " + str((coord1, coord2)))
         # self.game_window.refresh()
         time.sleep(2)
@@ -299,7 +305,7 @@ class Game:
         #             self.game_grid[i][j] = random.randint(1, 3)
         new_arr = np.argwhere(self.game_grid == 0)
         for i in new_arr:
-            self.game_grid[i[0]][i[1]] = random.randint(1, 3)
+            self.game_grid[i[0]][i[1]] = random.randint(self.color_start_range, self.color_end_range)
         
         # print("Score : ", self.score)
         self.game_window.addstr(len(self.game_grid)+2,0, "Score : " + str(self.score))
@@ -311,24 +317,16 @@ class Game:
         
         avalanche = self.check_matches(self.game_grid, True)
         if avalanche:
+            self.game_window.clrtoeol()
             self.game_window.addstr(len(self.game_grid)+1,0, "Avalanche matches!")
             self.game_window.refresh()
             # print("Avalanche matches!")
         if (self.board_horizontal_matches or self.board_vertical_matches):
             self.shift_tiles(self.board_horizontal_matches, self.board_vertical_matches)
         else:
-            # continue_game = input("Do you want to continue?(Y/N)").lower()
-            # if "y" in continue_game:
-            #     print("continue_game : ", continue_game)
-            #     self.game_over = False
-                # self.game_grid = self.validate_board(self.game_grid)
-            
+            self.game_grid = self.validate_board(self.game_grid)
             self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
             self.input_tiles()
-            # else:
-            #     self.game_over = True
-            #     print("Game Over!")
-            #     print("Your score is ", self.score)
         
     def add_score(self, removed_tiles):
         self.score += len(removed_tiles)
