@@ -2,113 +2,28 @@ import numpy as np
 import collections
 import random
 import time
-
-
-board_horizontal_matches = []
-board_vertical_matches = []
-def check_matches(board, get_matches_flag):
-    global board_horizontal_matches
-    global board_vertical_matches
-    # function for checking all the matches in the board
-    if not get_matches_flag:
-        # check the whole board for vertical matches and return true if match found
-        for j in range(len(board[0])):
-            count = 1
-            for i in range(len(board) - 1):
-                if (board[i][j] == board[i + 1][j]):
-                    count += 1
-                else:
-                    count = 1
-                if (count >= 3):
-                    return True
-
-        # check the whole board for horizontal matches and return true if match found
-        for i in range(len(board)):
-            count = 1
-            for j in range(len(board[0]) - 1):
-                if (board[i][j] == board[i][j+1]):
-                    count += 1
-                else:
-                    count = 1
-                if (count >= 3):
-                    return True
-    
-    else:
-        board_horizontal_matches = []
-        for i in range(len(board)):
-            
-            horizontal_chain = []
-            for j in range(len(board[0])-1):
-                chain_continue_flag = False
-                if (board[i][j] == board[i][j+1]):
-                    if (i,j) not in horizontal_chain:
-                        horizontal_chain.append((i,j))
-                    horizontal_chain.append((i,j+1))
-                    chain_continue_flag = True
-                if (j == len(board[0]) - 2):
-                    chain_continue_flag = False
-                if (not chain_continue_flag):
-                    if len(horizontal_chain)>=3:
-                        board_horizontal_matches.append(horizontal_chain) 
-                        break
-                    else:
-                        horizontal_chain.clear()
-        board_vertical_matches = []
-        for j in range(len(board[0])):
-            vertical_chain = []
-            for i in range(len(board) - 1):
-                chain_continue_flag = False
-                if (board[i][j] == board[i+1][j]):
-                    if((i,j) not in vertical_chain):
-                        vertical_chain.append((i, j))
-                    vertical_chain.append((i+1, j))
-                    chain_continue_flag = True
-                if (i == len(board) - 2):
-                    chain_continue_flag = False
-                if (not chain_continue_flag):
-                    if len(vertical_chain)>=3:
-                        board_vertical_matches.append(vertical_chain) 
-                        break
-                    else:
-                        vertical_chain.clear()
-        if (board_horizontal_matches or board_vertical_matches):
-            return True
-
-    return False
-
-def find_moves(board):
-    # function for checking if there is any possible move in the board
-    global co_ords
-    co_ords = []
-    # vertical swap and check for matches
-    for i in range(len(board) - 1):
-        for j in range(len(board[0])):
-            board_copy = board.copy()
-            board_copy[i][j], board_copy[i+1][j] = board_copy[i+1][j], board_copy[i][j]
-            match = check_matches(board_copy, False)
-            if match:
-                co_ords.append([(i, j), (i+1, j)])
-
-    # horizontal swap and check for matches
-    for i in range(len(board)):
-        for j in range(len(board[0]) - 1):
-            board_copy = board.copy()
-            board_copy[i][j], board_copy[i][j+1] = board_copy[i][j+1], board_copy[i][j]
-            match = check_matches(board_copy, False)
-            if match:
-                co_ords.append([(i, j), (i, j+1)])
-    return co_ords
+import csv
+import os
 
 class Game:
     score = 0
     game_grid = []
     possible_move_positions = []
+    board_horizontal_matches = []
+    board_vertical_matches = []
 
     # grid size and range of colors
-    grid_size = 5, 5
+    grid_size = 7, 7
     color_start_range = 1
-    color_end_range = 4
+    color_end_range = 24
 
+    def test_time_valid_board(self):
+        init_board = np.random.randint(self.color_start_range, self.color_end_range, size=self.grid_size)
+        # init_board = np.random.choice(self.color_end_range, self.grid_size, replace=False)
+        self.game_grid = self.validate_board(init_board)
+        self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
+        # print(self.game_grid)
+    
     def init_board(self):
         # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
@@ -117,15 +32,12 @@ class Game:
         print("Generated Board : ")
         print(self.game_grid)
         self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
-        print("self.possible_move_positions==", self.possible_move_positions)
-
-    def get_board(self):
-        return self.game_grid
+        self.input_tiles()   
 
     def validate_board(self, board):
         new_board = board
         # check whether the board contains any 3-matches
-        while check_matches(new_board, False):
+        while self.check_matches(new_board, False):
             new_board = self.shuffle_board(new_board)
         return new_board
 
@@ -135,23 +47,116 @@ class Game:
         board = board.reshape(self.grid_size)
         return board
     
+    def check_matches(self, board, get_matches_flag):
+        
+        # function for checking all the matches in the board
+        if not get_matches_flag:
+            # check the whole board for vertical matches and return true if match found
+            for j in range(len(board[0])):
+                count = 1
+                for i in range(len(board) - 1):
+                    if (board[i][j] == board[i + 1][j]):
+                        count += 1
+                    else:
+                        count = 1
+                    if (count >= 3):
+                        return True
+
+            # check the whole board for horizontal matches and return true if match found
+            for i in range(len(board)):
+                count = 1
+                for j in range(len(board[0]) - 1):
+                    if (board[i][j] == board[i][j+1]):
+                        count += 1
+                    else:
+                        count = 1
+                    if (count >= 3):
+                        return True
+        
+        else:
+            self.board_horizontal_matches = []
+            for i in range(len(board)):
+                
+                horizontal_chain = []
+                for j in range(len(board[0])-1):
+                    chain_continue_flag = False
+                    if (board[i][j] == board[i][j+1]):
+                        if (i,j) not in horizontal_chain:
+                            horizontal_chain.append((i,j))
+                        horizontal_chain.append((i,j+1))
+                        chain_continue_flag = True
+                    if (j == len(self.game_grid[0]) - 2):
+                        chain_continue_flag = False
+                    if (not chain_continue_flag):
+                        if len(horizontal_chain)>=3:
+                            self.board_horizontal_matches.append(horizontal_chain) 
+                            break
+                        else:
+                            horizontal_chain.clear()
+            self.board_vertical_matches = []
+            for j in range(len(board[0])):
+                vertical_chain = []
+                for i in range(len(board) - 1):
+                    chain_continue_flag = False
+                    if (board[i][j] == board[i+1][j]):
+                        if((i,j) not in vertical_chain):
+                            vertical_chain.append((i, j))
+                        vertical_chain.append((i+1, j))
+                        chain_continue_flag = True
+                    if (i == len(board) - 2):
+                        chain_continue_flag = False
+                    if (not chain_continue_flag):
+                        if len(vertical_chain)>=3:
+                            self.board_vertical_matches.append(vertical_chain) 
+                            break
+                        else:
+                            vertical_chain.clear()
+            if (self.board_horizontal_matches or self.board_vertical_matches):
+                return True
+
+        return False
 
     def get_possible_move_positions(self, board):
-        self.possible_move_positions = find_moves(board)
+        self.possible_move_positions = self.find_moves(board)
         while not self.possible_move_positions:
             board = self.shuffle_board(board)
-            self.possible_move_positions = find_moves(board)
+            self.possible_move_positions = self.find_moves(board)
         return self.possible_move_positions
 
-    def input_tiles(self, move):
+    def input_tiles(self):
+        # move = self.possible_move_positions.pop() #pop the last pair of co-ordinates from the possible moves for swap
+        move = random.choice(self.possible_move_positions)
         (coord1, coord2) = move
         print("One move taken from possible moves: ", coord1, coord2)
         is_valid_move = self.validate_move(coord1, coord2)
         if is_valid_move:
             self.swap_tiles(coord1, coord2)
-        return is_valid_move
+        else:
+            print("Invalid move!!")
     
- 
+    def find_moves(self, board):
+        # function for checking if there is any possible move in the board
+        global co_ords
+        co_ords = []
+        # vertical swap and check for matches
+        for i in range(len(board) - 1):
+            for j in range(len(board[0])):
+                board_copy = board.copy()
+                board_copy[i][j], board_copy[i+1][j] = board_copy[i+1][j], board_copy[i][j]
+                match = self.check_matches(board_copy, False)
+                if match:
+                    co_ords.append([(i, j), (i+1, j)])
+
+        # horizontal swap and check for matches
+        for i in range(len(board)):
+            for j in range(len(board[0]) - 1):
+                board_copy = board.copy()
+                board_copy[i][j], board_copy[i][j+1] = board_copy[i][j+1], board_copy[i][j]
+                match = self.check_matches(board_copy, False)
+                if match:
+                    co_ords.append([(i, j), (i, j+1)])
+        return co_ords
+
     def swap_tiles(self, coord1, coord2):
         # function for swapping the valid move and checking for the matches in 
         # corresponding rows and columns
@@ -282,15 +287,15 @@ class Game:
         print("Tiles added:")
         print(self.game_grid)
         
-        avalanche = check_matches(self.game_grid, True)
+        avalanche = self.check_matches(self.game_grid, True)
         if avalanche:
             print("Avalanche matches!")
-            self.shift_tiles(board_horizontal_matches, board_vertical_matches)
+            self.shift_tiles(self.board_horizontal_matches, self.board_vertical_matches)
         else:
             self.game_grid = self.validate_board(self.game_grid)
             time.sleep(2)
             self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
-            Agent().select_move(self.game_grid)
+            self.input_tiles()
         
     def add_score(self, removed_tiles):
         self.score += len(removed_tiles)
@@ -300,30 +305,25 @@ class Game:
         if ([coord1[0], coord1[1]], [coord2[0], coord2[1]]) or ([coord2[0], coord2[1]], [coord1[0], coord1[1]]) in self.possible_move_positions:
             return True
 
+if __name__ == "__main__":
+    g = Game()
+    start_time = time.time()
+    for i in range(100):
+        g.test_time_valid_board()
+    end_time = time.time()
+    elapsed_time = ((end_time - start_time) * 1000) / 100
+    print("Time taken to generate a valid board : ", elapsed_time, "milliseconds")
+    grid_size = g.grid_size
+    number_of_colors = g.color_end_range - g.color_start_range
+    
+    # my_file = Path("match_3_experiments.csv")
+    file_exists = os.path.isfile("match_3_experiments.csv")
 
-class Agent:
-    moves = []
-    game_board = []
-
-    def select_move(self, config):
-        print("board is:", config)
-        move = random.choice(find_moves(config))
-        return move
-
-next_move = []
-g = Game()
-g.init_board()
-current_config= g.get_board()
-agent = Agent()
-
-game_length = int(input("Enter number of switches to perform (or endless) : "))
-move_validity = False
-
-while(game_length > 0):
-    next_move = agent.select_move(current_config)
-    move_validity = g.input_tiles(next_move)
-    if not move_validity: 
-        print ("Invalid move. Try again!")
-    else:
-        game_length = game_length-1
-        current_config = g.get_board()
+    with open('match_3_experiments.csv', 'a+', newline='') as csv_file:
+        # csv_writer = csv.writer(csv_file)
+        fieldnames = ['Grid Size', 'Number of Colors', 'Average time taken to generate a valid board (in milliseconds)']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        if not file_exists:
+            print("File does not exist")          
+            writer.writeheader()
+        writer.writerow({'Grid Size': grid_size, 'Number of Colors': number_of_colors, 'Average time taken to generate a valid board (in milliseconds)': elapsed_time})

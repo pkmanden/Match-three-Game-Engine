@@ -2,10 +2,20 @@ import numpy as np
 import collections
 import random
 import time
-
+import csv
+import os
+import math
 
 board_horizontal_matches = []
 board_vertical_matches = []
+num_shuffles = 0 # count for getting total number of shuffles
+total_moves = 0 # count for getting average number of moves per shuffle
+#three_matches_count = 0 # count of occurences of three-matches
+no_moves_count = 0 # count of occurences of no moves
+config_count = 0 #count of total number of board configurations
+possible_moves_count = 0 # count of total number of possible moves
+avalanche_match_count = 0 # count the number of avalanche matches occurred
+score = 0
 def check_matches(board, get_matches_flag):
     global board_horizontal_matches
     global board_vertical_matches
@@ -100,47 +110,61 @@ def find_moves(board):
     return co_ords
 
 class Game:
-    score = 0
     game_grid = []
     possible_move_positions = []
 
     # grid size and range of colors
-    grid_size = 5, 5
+    grid_size = 20, 20
     color_start_range = 1
-    color_end_range = 4
+    color_end_range = 101
+
 
     def init_board(self):
         # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
-        init_board = np.random.randint(self.color_start_range, self.color_end_range, size=self.grid_size)
-        self.game_grid = self.validate_board(init_board)
-        print("Generated Board : ")
-        print(self.game_grid)
-        self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
-        print("self.possible_move_positions==", self.possible_move_positions)
+        self.game_grid = np.random.randint(self.color_start_range, self.color_end_range, size=self.grid_size)
+        # self.game_grid = self.validate_board(init_board)
+        while check_matches(self.game_grid, False) or not find_moves(self.game_grid):
+            self.game_grid = np.random.randint(self.color_start_range, self.color_end_range, size=self.grid_size)
+        # print("Generated Board : ")
+        # print(self.game_grid)
+        # self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
+
 
     def get_board(self):
         return self.game_grid
 
     def validate_board(self, board):
+        #global three_matches_count
         new_board = board
         # check whether the board contains any 3-matches
         while check_matches(new_board, False):
+            #three_matches_count += 1
             new_board = self.shuffle_board(new_board)
         return new_board
 
     def shuffle_board(self, board):
+        global num_shuffles
+        num_shuffles += 1
+        # print("num shuffles : ", num_shuffles)
         board = board.ravel()
         np.random.shuffle(board)
         board = board.reshape(self.grid_size)
         return board
     
-
     def get_possible_move_positions(self, board):
+        global no_moves_count
+        global config_count
+        global possible_moves_count
         self.possible_move_positions = find_moves(board)
         while not self.possible_move_positions:
+            no_moves_count += 1
+            print("No possible moves. Shuffling...")
             board = self.shuffle_board(board)
             self.possible_move_positions = find_moves(board)
+        self.game_grid = board
+        config_count += 1
+        possible_moves_count += len(self.possible_move_positions)
         return self.possible_move_positions
 
     def input_tiles(self, move):
@@ -151,7 +175,6 @@ class Game:
             self.swap_tiles(coord1, coord2)
         return is_valid_move
     
- 
     def swap_tiles(self, coord1, coord2):
         # function for swapping the valid move and checking for the matches in 
         # corresponding rows and columns
@@ -236,10 +259,11 @@ class Game:
 
     def shift_tiles(self, row_matches, column_matches):
         # Function for shifting tiles above removed tiles
+        global score
         matched_cells = {}
         if row_matches:
             for match in row_matches:
-                self.score = self.add_score(match)
+                score = self.add_score(match)
                 for (row, col) in match:
                     self.game_grid[row][col] = 0
                     if(row in matched_cells):
@@ -249,7 +273,7 @@ class Game:
                         matched_cells[row]=[col]
         if column_matches:
             for match in column_matches:
-                self.score = self.add_score(match)
+                score = self.add_score(match)
                 for (row, col) in match:
                     self.game_grid[row][col] = 0
                     if(row in matched_cells):
@@ -274,56 +298,121 @@ class Game:
         self.distribute_new_tiles()
         
     def distribute_new_tiles(self):
+        global avalanche_match_count
         new_arr = np.argwhere(self.game_grid == 0)
         for i in new_arr:
             self.game_grid[i[0]][i[1]] = random.randint(self.color_start_range, self.color_end_range)
-        
-        print("Score : ", self.score)
+        print("Score : ", score)
         print("Tiles added:")
         print(self.game_grid)
         
         avalanche = check_matches(self.game_grid, True)
         if avalanche:
+            avalanche_match_count += 1
             print("Avalanche matches!")
             self.shift_tiles(board_horizontal_matches, board_vertical_matches)
         else:
             self.game_grid = self.validate_board(self.game_grid)
-            time.sleep(2)
+            # time.sleep(2)
             self.possible_move_positions = self.get_possible_move_positions(self.game_grid)
             Agent().select_move(self.game_grid)
         
     def add_score(self, removed_tiles):
-        self.score += len(removed_tiles)
-        return self.score
+        global score
+        score += len(removed_tiles)
+        return score
 
     def validate_move(self, coord1, coord2):
         if ([coord1[0], coord1[1]], [coord2[0], coord2[1]]) or ([coord2[0], coord2[1]], [coord1[0], coord1[1]]) in self.possible_move_positions:
             return True
 
-
 class Agent:
     moves = []
     game_board = []
-
     def select_move(self, config):
-        print("board is:", config)
+        # print("board is:", config)
         move = random.choice(find_moves(config))
         return move
 
 next_move = []
 g = Game()
 g.init_board()
-current_config= g.get_board()
+current_config = g.get_board()
 agent = Agent()
 
-game_length = int(input("Enter number of switches to perform (or endless) : "))
-move_validity = False
 
-while(game_length > 0):
-    next_move = agent.select_move(current_config)
-    move_validity = g.input_tiles(next_move)
-    if not move_validity: 
-        print ("Invalid move. Try again!")
+def play():
+    game_length = 100 #int(input("Enter number of switches to perform (or endless) : "))
+    global total_moves
+    global current_config
+    total_moves = game_length
+    move_validity = False
+    
+    while(game_length > 0):
+        next_move = agent.select_move(current_config)
+        move_validity = g.input_tiles(next_move)
+        if not move_validity: 
+            print ("Invalid move. Try again!")
+        else:
+            game_length = game_length-1
+            current_config = g.get_board()
+
+# def test_shuffles():
+#     grid_size = g.grid_size
+#     number_of_colors = g.color_end_range - g.color_start_range
+#     global num_shuffles
+#     # my_file = Path("match_3_experiments.csv")
+#     for i in range(1000):
+#         g.init_board()
+#     num_shuffles = num_shuffles / 1000
+#     file_exists = os.path.isfile("match_3_experiments_1.csv")
+
+#     with open('match_3_experiments_1.csv', 'a+', newline='') as csv_file:
+#         # csv_writer = csv.writer(csv_file)
+#         fieldnames = ['Grid Size', 'Number of Colors', 'Number of shuffles']
+#         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+#         if not file_exists:
+#             print("File does not exist")          
+#             writer.writeheader()
+#         writer.writerow({'Grid Size': grid_size, 'Number of Colors': number_of_colors, 'Number of shuffles': num_shuffles})
+
+def experiments():
+    grid_size = g.grid_size
+    number_of_colors = g.color_end_range - g.color_start_range
+    global num_shuffles
+    #global three_matches_count
+    global no_moves_count
+    global score
+    global possible_moves_count
+    global config_count
+    
+    file_exists = os.path.isfile("match_3_experiments_final.csv")
+    score_per_move = score / (total_moves * 10)
+    if num_shuffles == 0:
+        avg_moves_per_shuffle = math.inf
     else:
-        game_length = game_length-1
-        current_config = g.get_board()
+        avg_moves_per_shuffle = (total_moves * 10) / num_shuffles
+    avg_move_per_config = possible_moves_count / (config_count)
+
+    print("avg_moves_per_shuffle : ", avg_moves_per_shuffle)
+    print("score_per_move : ", score_per_move)
+    print("avg_move_per_config", avg_move_per_config)
+
+    with open('match_3_experiments_final.csv', 'a+', newline='') as csv_file:
+        # csv_writer = csv.writer(csv_file)
+        fieldnames = ['Grid Size', 'Number of Colors', 'Average Number of Moves until Shuffle occurs', 'Average Number of Times Deadlock Occurred', 'Average Score per Move', 'Average Number of Possible Moves per Configuration', 'Average Number of Avalanche matches occurred']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        if not file_exists:
+            print("File does not exist")          
+            writer.writeheader()
+        writer.writerow({'Grid Size': grid_size, 
+                        'Number of Colors': number_of_colors, 
+                        'Average Number of Moves until Shuffle occurs': avg_moves_per_shuffle,
+                        #'Number of Three Matches Occurred': three_matches_count,
+                        'Average Number of Times Deadlock Occurred': no_moves_count / 10,
+                        'Average Score per Move': score_per_move,
+                        'Average Number of Possible Moves per Configuration': avg_move_per_config,
+                        'Average Number of Avalanche matches occurred': avalanche_match_count / 10})
+for _ in range(10):
+    play()
+experiments()
