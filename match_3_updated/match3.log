@@ -1,0 +1,470 @@
+INFO:root:Starting game with board size (7, 7) and 5 colors.
+INFO:root:Initializing.
+INFO:root:	Repeating experiment 1 of 1 times.
+INFO:root:Generated board is invalid. Regenerating board.
+INFO:root:Regenerating attempt 1
+INFO:root:Generated board is invalid. Regenerating board.
+INFO:root:Regenerating attempt 2
+INFO:root:Generated board is valid after 2 attempts . Starting game
+INFO:root:Cumulative regeneration count 2
+
+INFO:root:	Moves left:100
+INFO:root:Score for the match is 3
+INFO:root:Game score: 3 and cumulative score: 3
+INFO:root:Avalanche detected. Cumulative avalanche count: 1
+INFO:root:Score for the match is 3
+INFO:root:Game score: 6 and cumulative score: 6
+INFO:root:	Moves left:99
+INFO:root:Score for the match is 3
+INFO:root:Game score: 9 and cumulative score: 9
+INFO:root:	Moves left:98
+INFO:root:Score for the match is 3
+INFO:root:Game score: 12 and cumulative score: 12
+INFO:root:	Moves left:97
+INFO:root:Score for the match is 3
+INFO:root:Game score: 15 and cumulative score: 15
+INFO:root:Avalanche detected. Cumulative avalanche count: 2
+INFO:root:Score for the match is 3
+INFO:root:Game score: 18 and cumulative score: 18
+INFO:root:Avalanche detected. Cumulative avalanche count: 3
+INFO:root:Score for the match is 3
+INFO:root:Game score: 21 and cumulative score: 21
+INFO:root:	Moves left:96
+INFO:root:Score for the match is 3
+INFO:root:Game score: 24 and cumulative score: 24
+INFO:root:	Moves left:95
+INFO:root:Score for the match is 3
+INFO:root:Game score: 27 and cumulative score: 27
+INFO:root:Avalanche detected. Cumulative avalanche count: 4
+INFO:root:Score for the match is 3
+INFO:root:Game score: 30 and cumulative score: 30
+INFO:root:	Moves left:94
+INFO:root:Score for the match is 4
+INFO:root:Game score: 34 and cumulative score: 34
+INFO:root:	Moves left:93
+INFO:root:Score for the match is 3
+INFO:root:Game score: 37 and cumulative score: 37
+INFO:root:	Moves left:92
+INFO:root:Score for the match is 3
+INFO:root:Game score: 40 and cumulative score: 40
+INFO:root:	Moves left:91
+INFO:root:Score for the match is 3
+INFO:root:Game score: 43 and cumulative score: 43
+INFO:root:Avalanche detected. Cumulative avalanche count: 5
+INFO:root:Score for the match is 3
+INFO:root:Game score: 46 and cumulative score: 46
+INFO:root:	Moves left:90
+INFO:root:Score for the match is 3
+INFO:root:Game score: 49 and cumulative score: 49
+INFO:root:	Moves left:89
+INFO:root:Score for the match is 4
+INFO:root:Game score: 53 and cumulative score: 53
+INFO:root:	Moves left:88
+INFO:root:Score for the match is 3
+INFO:root:Game score: 56 and cumulative score: 56
+INFO:root:	Moves left:87
+INFO:root:Score for the match is 3
+INFO:root:Game score: 59 and cumulative score: 59
+INFO:root:	Moves left:86
+INFO:root:Score for the match is 3
+INFO:root:Game score: 62 and cumulative score: 62
+INFO:root:	Moves left:85
+INFO:root:Score for the match is 3
+INFO:root:Game score: 65 and cumulative score: 65
+INFO:root:	Moves left:84
+INFO:root:Score for the match is 3
+INFO:root:Game score: 68 and cumulative score: 68
+INFO:root:	Moves left:83
+INFO:root:Score for the match is 3
+INFO:root:Game score: 71 and cumulative score: 71
+INFO:root:	Moves left:82
+INFO:root:Score for the match is 3
+INFO:root:Game score: 74 and cumulative score: 74
+INFO:root:	Moves left:81
+INFO:root:Score for the match is 3
+INFO:root:Game score: 77 and cumulative score: 77
+INFO:root:Avalanche detected. Cumulative avalanche count: 6
+INFO:root:Score for the match is 3
+INFO:root:Game score: 80 and cumulative score: 80
+INFO:root:Avalanche detected. Cumulative avalanche count: 7
+INFO:root:Score for the match is 3
+INFO:root:Game score: 83 and cumulative score: 83
+INFO:root:	Moves left:80
+INFO:root:Score for the match is 3
+INFO:root:Game score: 86 and cumulative score: 86
+INFO:root:	Moves left:79
+INFO:root:Score for the match is 3
+INFO:root:Game score: 89 and cumulative score: 89
+INFO:root:	Moves left:78
+INFO:root:Score for the match is 3
+INFO:root:Game score: 92 and cumulative score: 92
+INFO:root:	Moves left:77
+INFO:root:Score for the match is 3
+INFO:root:Game score: 95 and cumulative score: 95
+INFO:root:Score for the match is 3
+INFO:root:Game score: 98 and cumulative score: 98
+INFO:root:	Moves left:76
+INFO:root:Score for the match is 3
+INFO:root:Game score: 101 and cumulative score: 101
+INFO:root:Avalanche detected. Cumulative avalanche count: 8
+INFO:root:Score for the match is 3
+INFO:root:Game score: 104 and cumulative score: 104
+INFO:root:	Moves left:75
+INFO:root:Score for the match is 3
+INFO:root:Game score: 107 and cumulative score: 107
+INFO:root:	Moves left:74
+INFO:root:Score for the match is 3
+INFO:root:Game score: 110 and cumulative score: 110
+INFO:root:	Moves left:73
+INFO:root:Score for the match is 3
+INFO:root:Game score: 113 and cumulative score: 113
+INFO:root:Avalanche detected. Cumulative avalanche count: 9
+INFO:root:Score for the match is 3
+INFO:root:Game score: 116 and cumulative score: 116
+INFO:root:	Moves left:72
+INFO:root:Score for the match is 3
+INFO:root:Game score: 119 and cumulative score: 119
+INFO:root:Avalanche detected. Cumulative avalanche count: 10
+INFO:root:Score for the match is 3
+INFO:root:Game score: 122 and cumulative score: 122
+INFO:root:Avalanche detected. Cumulative avalanche count: 11
+INFO:root:Score for the match is 3
+INFO:root:Game score: 125 and cumulative score: 125
+INFO:root:Avalanche detected. Cumulative avalanche count: 12
+INFO:root:Score for the match is 4
+INFO:root:Game score: 129 and cumulative score: 129
+INFO:root:Score for the match is 3
+INFO:root:Game score: 132 and cumulative score: 132
+INFO:root:	Moves left:71
+INFO:root:Score for the match is 3
+INFO:root:Game score: 135 and cumulative score: 135
+INFO:root:	Moves left:70
+INFO:root:Score for the match is 3
+INFO:root:Game score: 138 and cumulative score: 138
+INFO:root:	Moves left:69
+INFO:root:Score for the match is 3
+INFO:root:Game score: 141 and cumulative score: 141
+INFO:root:	Moves left:68
+INFO:root:Score for the match is 3
+INFO:root:Game score: 144 and cumulative score: 144
+INFO:root:	Moves left:67
+INFO:root:Score for the match is 3
+INFO:root:Game score: 147 and cumulative score: 147
+INFO:root:Avalanche detected. Cumulative avalanche count: 13
+INFO:root:Score for the match is 3
+INFO:root:Game score: 150 and cumulative score: 150
+INFO:root:	Moves left:66
+INFO:root:Score for the match is 3
+INFO:root:Game score: 153 and cumulative score: 153
+INFO:root:	Moves left:65
+INFO:root:Score for the match is 3
+INFO:root:Game score: 156 and cumulative score: 156
+INFO:root:	Moves left:64
+INFO:root:Score for the match is 3
+INFO:root:Game score: 159 and cumulative score: 159
+INFO:root:	Moves left:63
+INFO:root:Score for the match is 3
+INFO:root:Game score: 162 and cumulative score: 162
+INFO:root:	Moves left:62
+INFO:root:Score for the match is 3
+INFO:root:Game score: 165 and cumulative score: 165
+INFO:root:Avalanche detected. Cumulative avalanche count: 14
+INFO:root:Score for the match is 3
+INFO:root:Game score: 168 and cumulative score: 168
+INFO:root:Avalanche detected. Cumulative avalanche count: 15
+INFO:root:Score for the match is 3
+INFO:root:Game score: 171 and cumulative score: 171
+INFO:root:	Moves left:61
+INFO:root:Score for the match is 3
+INFO:root:Game score: 174 and cumulative score: 174
+INFO:root:	Moves left:60
+INFO:root:Score for the match is 3
+INFO:root:Game score: 177 and cumulative score: 177
+INFO:root:	Moves left:59
+INFO:root:Score for the match is 3
+INFO:root:Game score: 180 and cumulative score: 180
+INFO:root:	Moves left:58
+INFO:root:Score for the match is 3
+INFO:root:Game score: 183 and cumulative score: 183
+INFO:root:Avalanche detected. Cumulative avalanche count: 16
+INFO:root:Score for the match is 3
+INFO:root:Game score: 186 and cumulative score: 186
+INFO:root:Avalanche detected. Cumulative avalanche count: 17
+INFO:root:Score for the match is 3
+INFO:root:Game score: 189 and cumulative score: 189
+INFO:root:Avalanche detected. Cumulative avalanche count: 18
+INFO:root:Score for the match is 3
+INFO:root:Game score: 192 and cumulative score: 192
+INFO:root:Avalanche detected. Cumulative avalanche count: 19
+INFO:root:Score for the match is 3
+INFO:root:Game score: 195 and cumulative score: 195
+INFO:root:	Moves left:57
+INFO:root:Score for the match is 3
+INFO:root:Game score: 198 and cumulative score: 198
+INFO:root:Avalanche detected. Cumulative avalanche count: 20
+INFO:root:Score for the match is 3
+INFO:root:Game score: 201 and cumulative score: 201
+INFO:root:Score for the match is 3
+INFO:root:Game score: 204 and cumulative score: 204
+INFO:root:Avalanche detected. Cumulative avalanche count: 21
+INFO:root:Score for the match is 3
+INFO:root:Game score: 207 and cumulative score: 207
+INFO:root:	Moves left:56
+INFO:root:Score for the match is 3
+INFO:root:Game score: 210 and cumulative score: 210
+INFO:root:	Moves left:55
+INFO:root:Score for the match is 3
+INFO:root:Game score: 213 and cumulative score: 213
+INFO:root:	Moves left:54
+INFO:root:Score for the match is 3
+INFO:root:Game score: 216 and cumulative score: 216
+INFO:root:	Moves left:53
+INFO:root:Score for the match is 3
+INFO:root:Game score: 219 and cumulative score: 219
+INFO:root:	Moves left:52
+INFO:root:Score for the match is 3
+INFO:root:Game score: 222 and cumulative score: 222
+INFO:root:Avalanche detected. Cumulative avalanche count: 22
+INFO:root:Score for the match is 3
+INFO:root:Game score: 225 and cumulative score: 225
+INFO:root:Avalanche detected. Cumulative avalanche count: 23
+INFO:root:Score for the match is 3
+INFO:root:Game score: 228 and cumulative score: 228
+INFO:root:Avalanche detected. Cumulative avalanche count: 24
+INFO:root:Score for the match is 3
+INFO:root:Game score: 231 and cumulative score: 231
+INFO:root:	Moves left:51
+INFO:root:Score for the match is 3
+INFO:root:Game score: 234 and cumulative score: 234
+INFO:root:Avalanche detected. Cumulative avalanche count: 25
+INFO:root:Score for the match is 3
+INFO:root:Game score: 237 and cumulative score: 237
+INFO:root:	Moves left:50
+INFO:root:Score for the match is 3
+INFO:root:Game score: 240 and cumulative score: 240
+INFO:root:	Moves left:49
+INFO:root:Score for the match is 3
+INFO:root:Game score: 243 and cumulative score: 243
+INFO:root:	Moves left:48
+INFO:root:Score for the match is 3
+INFO:root:Game score: 246 and cumulative score: 246
+INFO:root:	Moves left:47
+INFO:root:Score for the match is 3
+INFO:root:Game score: 249 and cumulative score: 249
+INFO:root:Avalanche detected. Cumulative avalanche count: 26
+INFO:root:Score for the match is 3
+INFO:root:Game score: 252 and cumulative score: 252
+INFO:root:	Moves left:46
+INFO:root:Score for the match is 3
+INFO:root:Game score: 255 and cumulative score: 255
+INFO:root:	Moves left:45
+INFO:root:Score for the match is 4
+INFO:root:Game score: 259 and cumulative score: 259
+INFO:root:	Moves left:44
+INFO:root:Score for the match is 3
+INFO:root:Game score: 262 and cumulative score: 262
+INFO:root:	Moves left:43
+INFO:root:Score for the match is 3
+INFO:root:Game score: 265 and cumulative score: 265
+INFO:root:Avalanche detected. Cumulative avalanche count: 27
+INFO:root:Score for the match is 4
+INFO:root:Game score: 269 and cumulative score: 269
+INFO:root:Score for the match is 3
+INFO:root:Game score: 272 and cumulative score: 272
+INFO:root:Score for the match is 3
+INFO:root:Game score: 275 and cumulative score: 275
+INFO:root:Avalanche detected. Cumulative avalanche count: 28
+INFO:root:Score for the match is 3
+INFO:root:Game score: 278 and cumulative score: 278
+INFO:root:	Moves left:42
+INFO:root:Score for the match is 3
+INFO:root:Game score: 281 and cumulative score: 281
+INFO:root:	Moves left:41
+INFO:root:Score for the match is 3
+INFO:root:Game score: 284 and cumulative score: 284
+INFO:root:	Moves left:40
+INFO:root:Score for the match is 3
+INFO:root:Game score: 287 and cumulative score: 287
+INFO:root:Avalanche detected. Cumulative avalanche count: 29
+INFO:root:Score for the match is 3
+INFO:root:Game score: 290 and cumulative score: 290
+INFO:root:	Moves left:39
+INFO:root:Score for the match is 3
+INFO:root:Game score: 293 and cumulative score: 293
+INFO:root:	Moves left:38
+INFO:root:Score for the match is 3
+INFO:root:Game score: 296 and cumulative score: 296
+INFO:root:	Moves left:37
+INFO:root:Score for the match is 3
+INFO:root:Game score: 299 and cumulative score: 299
+INFO:root:	Moves left:36
+INFO:root:Score for the match is 3
+INFO:root:Game score: 302 and cumulative score: 302
+INFO:root:	Moves left:35
+INFO:root:Score for the match is 3
+INFO:root:Game score: 305 and cumulative score: 305
+INFO:root:	Moves left:34
+INFO:root:Score for the match is 3
+INFO:root:Game score: 308 and cumulative score: 308
+INFO:root:	Moves left:33
+INFO:root:Score for the match is 4
+INFO:root:Game score: 312 and cumulative score: 312
+INFO:root:Score for the match is 3
+INFO:root:Game score: 315 and cumulative score: 315
+INFO:root:Avalanche detected. Cumulative avalanche count: 30
+INFO:root:Score for the match is 3
+INFO:root:Game score: 318 and cumulative score: 318
+INFO:root:Score for the match is 3
+INFO:root:Game score: 321 and cumulative score: 321
+INFO:root:	Moves left:32
+INFO:root:Score for the match is 3
+INFO:root:Game score: 324 and cumulative score: 324
+INFO:root:	Moves left:31
+INFO:root:Score for the match is 3
+INFO:root:Game score: 327 and cumulative score: 327
+INFO:root:Avalanche detected. Cumulative avalanche count: 31
+INFO:root:Score for the match is 3
+INFO:root:Game score: 330 and cumulative score: 330
+INFO:root:	Moves left:30
+INFO:root:Score for the match is 3
+INFO:root:Game score: 333 and cumulative score: 333
+INFO:root:	Moves left:29
+INFO:root:Score for the match is 4
+INFO:root:Game score: 337 and cumulative score: 337
+INFO:root:Avalanche detected. Cumulative avalanche count: 32
+INFO:root:Score for the match is 3
+INFO:root:Game score: 340 and cumulative score: 340
+INFO:root:Avalanche detected. Cumulative avalanche count: 33
+INFO:root:Score for the match is 3
+INFO:root:Game score: 343 and cumulative score: 343
+INFO:root:Avalanche detected. Cumulative avalanche count: 34
+INFO:root:Score for the match is 3
+INFO:root:Game score: 346 and cumulative score: 346
+INFO:root:	Moves left:28
+INFO:root:Score for the match is 3
+INFO:root:Game score: 349 and cumulative score: 349
+INFO:root:Avalanche detected. Cumulative avalanche count: 35
+INFO:root:Score for the match is 3
+INFO:root:Game score: 352 and cumulative score: 352
+INFO:root:	Moves left:27
+INFO:root:Score for the match is 3
+INFO:root:Game score: 355 and cumulative score: 355
+INFO:root:	Moves left:26
+INFO:root:Score for the match is 3
+INFO:root:Game score: 358 and cumulative score: 358
+INFO:root:	Moves left:25
+INFO:root:Score for the match is 3
+INFO:root:Game score: 361 and cumulative score: 361
+INFO:root:	Moves left:24
+INFO:root:Score for the match is 3
+INFO:root:Game score: 364 and cumulative score: 364
+INFO:root:Avalanche detected. Cumulative avalanche count: 36
+INFO:root:Score for the match is 4
+INFO:root:Game score: 368 and cumulative score: 368
+INFO:root:	Moves left:23
+INFO:root:Score for the match is 3
+INFO:root:Game score: 371 and cumulative score: 371
+INFO:root:Avalanche detected. Cumulative avalanche count: 37
+INFO:root:Score for the match is 3
+INFO:root:Game score: 374 and cumulative score: 374
+INFO:root:	Moves left:22
+INFO:root:Score for the match is 3
+INFO:root:Game score: 377 and cumulative score: 377
+INFO:root:	Moves left:21
+INFO:root:Score for the match is 3
+INFO:root:Game score: 380 and cumulative score: 380
+INFO:root:	Moves left:20
+INFO:root:Score for the match is 3
+INFO:root:Game score: 383 and cumulative score: 383
+INFO:root:	Moves left:19
+INFO:root:Score for the match is 3
+INFO:root:Game score: 386 and cumulative score: 386
+INFO:root:Avalanche detected. Cumulative avalanche count: 38
+INFO:root:Score for the match is 3
+INFO:root:Game score: 389 and cumulative score: 389
+INFO:root:	Moves left:18
+INFO:root:Score for the match is 3
+INFO:root:Game score: 392 and cumulative score: 392
+INFO:root:Avalanche detected. Cumulative avalanche count: 39
+INFO:root:Score for the match is 3
+INFO:root:Game score: 395 and cumulative score: 395
+INFO:root:Score for the match is 3
+INFO:root:Game score: 398 and cumulative score: 398
+INFO:root:	Moves left:17
+INFO:root:Score for the match is 3
+INFO:root:Game score: 401 and cumulative score: 401
+INFO:root:	Moves left:16
+INFO:root:Score for the match is 3
+INFO:root:Game score: 404 and cumulative score: 404
+INFO:root:	Moves left:15
+INFO:root:Score for the match is 3
+INFO:root:Game score: 407 and cumulative score: 407
+INFO:root:	Moves left:14
+INFO:root:Score for the match is 3
+INFO:root:Game score: 410 and cumulative score: 410
+INFO:root:	Moves left:13
+INFO:root:Score for the match is 3
+INFO:root:Game score: 413 and cumulative score: 413
+INFO:root:Avalanche detected. Cumulative avalanche count: 40
+INFO:root:Score for the match is 3
+INFO:root:Game score: 416 and cumulative score: 416
+INFO:root:	Moves left:12
+INFO:root:Score for the match is 3
+INFO:root:Game score: 419 and cumulative score: 419
+INFO:root:Avalanche detected. Cumulative avalanche count: 41
+INFO:root:Score for the match is 3
+INFO:root:Game score: 422 and cumulative score: 422
+INFO:root:	Moves left:11
+INFO:root:Score for the match is 4
+INFO:root:Game score: 426 and cumulative score: 426
+INFO:root:	Moves left:10
+INFO:root:Score for the match is 3
+INFO:root:Game score: 429 and cumulative score: 429
+INFO:root:Avalanche detected. Cumulative avalanche count: 42
+INFO:root:Score for the match is 3
+INFO:root:Game score: 432 and cumulative score: 432
+INFO:root:Avalanche detected. Cumulative avalanche count: 43
+INFO:root:Score for the match is 3
+INFO:root:Game score: 435 and cumulative score: 435
+INFO:root:	Moves left:9
+INFO:root:Score for the match is 3
+INFO:root:Game score: 438 and cumulative score: 438
+INFO:root:Avalanche detected. Cumulative avalanche count: 44
+INFO:root:Score for the match is 3
+INFO:root:Game score: 441 and cumulative score: 441
+INFO:root:	Moves left:8
+INFO:root:Score for the match is 3
+INFO:root:Game score: 444 and cumulative score: 444
+INFO:root:	Moves left:7
+INFO:root:Score for the match is 3
+INFO:root:Game score: 447 and cumulative score: 447
+INFO:root:	Moves left:6
+INFO:root:Score for the match is 3
+INFO:root:Game score: 450 and cumulative score: 450
+INFO:root:	Moves left:5
+INFO:root:Score for the match is 3
+INFO:root:Game score: 453 and cumulative score: 453
+INFO:root:Avalanche detected. Cumulative avalanche count: 45
+INFO:root:Score for the match is 3
+INFO:root:Game score: 456 and cumulative score: 456
+INFO:root:	Moves left:4
+INFO:root:Score for the match is 3
+INFO:root:Game score: 459 and cumulative score: 459
+INFO:root:	Moves left:3
+INFO:root:Score for the match is 3
+INFO:root:Game score: 462 and cumulative score: 462
+INFO:root:	Moves left:2
+INFO:root:Score for the match is 3
+INFO:root:Game score: 465 and cumulative score: 465
+INFO:root:Avalanche detected. Cumulative avalanche count: 46
+INFO:root:Score for the match is 3
+INFO:root:Game score: 468 and cumulative score: 468
+INFO:root:Avalanche detected. Cumulative avalanche count: 47
+INFO:root:Score for the match is 3
+INFO:root:Game score: 471 and cumulative score: 471
+INFO:root:	Moves left:1
+INFO:root:Score for the match is 3
+INFO:root:Game score: 474 and cumulative score: 474
+INFO:root:Avalanche detected. Cumulative avalanche count: 48
+INFO:root:Score for the match is 3
+INFO:root:Game score: 477 and cumulative score: 477
