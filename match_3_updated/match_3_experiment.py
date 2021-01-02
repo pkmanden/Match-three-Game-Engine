@@ -10,7 +10,7 @@ class Experiment:
 
     def __init__(self):
         print("Exp init")
-        file_exists = os.path.isfile("match_3_updated/exp_game_results.csv")
+        file_exists = os.path.isfile("exp_game_results.csv")
         print(file_exists)
         with open('exp_game_results.csv', 'w', newline='') as csv_file:
             fieldnames = ['Grid Size', 'Number of Colors',
@@ -34,7 +34,6 @@ class Experiment:
         self.exp_total_avalanche_match_count = 0  # count the number of avalanche matches occurred
 
     def store_experiment_result(self, grid_size, number_of_colors, experiment_repeats):
-        global NUM_OF_MOVES_PER_GAME
 
         logging.info("Cumulative game score is: " + str(self.exp_total_score))
         logging.info("Cumulative regeneration is: " + str(self.exp_total_num_regenerations))
@@ -42,7 +41,11 @@ class Experiment:
         logging.info("Cumulative no of valid moves made is: " + str(self.exp_total_moves))
         logging.info("Cumulative no of possible moves: " + str(self.exp_total_possible_moves_count) + "\n")
 
-        score_per_move = self.exp_total_score / (self.exp_total_moves * experiment_repeats)
+        if self.exp_total_moves == 0:
+            score_per_move = 0
+        else:
+            score_per_move = self.exp_total_score / self.exp_total_moves
+
         if self.exp_total_num_shuffles == 0:
             avg_moves_per_shuffle = math.inf
         else:
@@ -50,12 +53,8 @@ class Experiment:
 
         average_regeneration_for_init = self.exp_total_num_regenerations / experiment_repeats
         average_deadlock_count = self.exp_total_num_shuffles / experiment_repeats
-
         avg_possible_moves_per_config = self.exp_total_possible_moves_count / (NUM_OF_MOVES_PER_GAME * experiment_repeats)
-
-        print("avg_moves_per_shuffle : ", avg_moves_per_shuffle)
-        print("score_per_move : ", score_per_move )
-        #    print("avg_move_per_config", avg_move_per_config)
+        avg_avalanche_count = self.exp_total_avalanche_match_count / experiment_repeats
 
         logging.info("Average game score is: " + str(score_per_move))
         logging.info("Average regeneration for init: " + str(average_regeneration_for_init))
@@ -63,8 +62,9 @@ class Experiment:
         logging.info("Average possible moves per configuration: " + str(avg_possible_moves_per_config))
         logging.info("Average move per shuffle: " + str(avg_moves_per_shuffle))
 
-        with open('match_3_updated/exp_game_results.csv', 'a+',  newline='') as csv_file:
-            fieldnames = ['Grid Size', 'Number of Colors',
+        with open('exp_game_results.csv', 'a+',  newline='') as csv_file:
+            fieldnames = ['Grid Size',
+                          'Number of Colors',
                           'Average Number of Regenerations until valid board generation',
                           'Average Number of Moves until Shuffle occurs',
                           'Average Number of Times Deadlock Occurred',
@@ -79,5 +79,5 @@ class Experiment:
                              'Average Number of Times Deadlock Occurred': average_deadlock_count,
                              'Average Score per Move': score_per_move,
                              'Average Number of Possible Moves per Configuration': avg_possible_moves_per_config,
-                             'Average Number of Avalanche matches occurred': self.exp_total_avalanche_match_count / experiment_repeats})
+                             'Average Number of Avalanche matches occurred': avg_avalanche_count})
 

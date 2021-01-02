@@ -6,9 +6,10 @@ import numpy as np
 import collections
 from match_3_constants import *
 from match_3_agents import *
+import pandas as pd
 
 
-logging.basicConfig(filename='match_3_updated/match3.log', filemode='w', level=logging.INFO)
+logging.basicConfig(filename='match3.log', filemode='w', level=logging.INFO)
 
 board_horizontal_matches = []
 board_vertical_matches = []
@@ -29,22 +30,22 @@ class Game:
         for j in range(len(board[0])):
             count = 1
             for i in range(len(board) - 1):
-                if (board[i][j] == board[i + 1][j]):
+                if board[i][j] == board[i + 1][j]:
                     count += 1
                 else:
                     count = 1
-                if (count >= 3):
+                if count >= 3:
                     return True
 
         # check the whole board for horizontal matches and return true if match found
         for i in range(len(board)):
             count = 1
             for j in range(len(board[0]) - 1):
-                if (board[i][j] == board[i][j + 1]):
+                if board[i][j] == board[i][j + 1]:
                     count += 1
                 else:
                     count = 1
-                if (count >= 3):
+                if count >= 3:
                     return True
 
         return False
@@ -61,14 +62,14 @@ class Game:
             horizontal_chain = []
             for j in range(len(board[0]) - 1):
                 chain_continue_flag = False
-                if (board[i][j] == board[i][j + 1]):
+                if board[i][j] == board[i][j + 1]:
                     if (i, j) not in horizontal_chain:
                         horizontal_chain.append((i, j))
                     horizontal_chain.append((i, j + 1))
                     chain_continue_flag = True
-                if (j == len(board[0]) - 2):
+                if j == len(board[0]) - 2:
                     chain_continue_flag = False
-                if (not chain_continue_flag):
+                if not chain_continue_flag:
                     if len(horizontal_chain) >= 3:
                         board_horizontal_matches.append(horizontal_chain)
                         match_found_flag = True
@@ -81,14 +82,14 @@ class Game:
             vertical_chain = []
             for i in range(len(board) - 1):
                 chain_continue_flag = False
-                if (board[i][j] == board[i + 1][j]):
-                    if ((i, j) not in vertical_chain):
+                if board[i][j] == board[i + 1][j]:
+                    if (i, j) not in vertical_chain:
                         vertical_chain.append((i, j))
                     vertical_chain.append((i + 1, j))
                     chain_continue_flag = True
-                if (i == len(board) - 2):
+                if i == len(board) - 2:
                     chain_continue_flag = False
-                if (not chain_continue_flag):
+                if not chain_continue_flag:
                     if len(vertical_chain) >= 3:
                         board_vertical_matches.append(vertical_chain)
                         match_found_flag = True
@@ -201,14 +202,14 @@ class Game:
                 horizontal_chain = []
                 for j in range(len(self.game_grid[0]) - 1):
                     chain_continue_flag = False
-                    if (self.game_grid[i][j] == self.game_grid[i][j + 1]):
-                        if ((i, j) not in horizontal_chain):
+                    if self.game_grid[i][j] == self.game_grid[i][j + 1]:
+                        if (i, j) not in horizontal_chain:
                             horizontal_chain.append((i, j))
                         horizontal_chain.append((i, j + 1))
                         chain_continue_flag = True
-                    if (j == len(self.game_grid[0]) - 2):
+                    if j == len(self.game_grid[0]) - 2:
                         chain_continue_flag = False
-                    if (not chain_continue_flag):
+                    if not chain_continue_flag:
                         if len(horizontal_chain) >= 3:
                             horizontal_matches.append(horizontal_chain)
                             break
@@ -218,14 +219,14 @@ class Game:
             vertical_chain = []
             for i in range(len(self.game_grid) - 1):  # check the 1 column
                 chain_continue_flag = False
-                if (self.game_grid[i][coord1[1]] == self.game_grid[i + 1][coord1[1]]):
-                    if ((i, coord1[1]) not in vertical_chain):
+                if self.game_grid[i][coord1[1]] == self.game_grid[i + 1][coord1[1]]:
+                    if (i, coord1[1]) not in vertical_chain:
                         vertical_chain.append((i, coord1[1]))
                     vertical_chain.append((i + 1, coord1[1]))
                     chain_continue_flag = True
-                if (i == len(self.game_grid) - 2):
+                if i == len(self.game_grid) - 2:
                     chain_continue_flag = False
-                if (not chain_continue_flag):
+                if not chain_continue_flag:
                     if len(vertical_chain) >= 3:
                         vertical_matches.append(vertical_chain)
                         break
@@ -237,14 +238,14 @@ class Game:
                 vertical_chain = []
                 for i in range(len(self.game_grid) - 1):
                     chain_continue_flag = False
-                    if (self.game_grid[i][j] == self.game_grid[i + 1][j]):
-                        if ((i, j) not in vertical_chain):
+                    if self.game_grid[i][j] == self.game_grid[i + 1][j]:
+                        if (i, j) not in vertical_chain:
                             vertical_chain.append((i, j))
                         vertical_chain.append((i + 1, j))
                         chain_continue_flag = True
-                    if (i == len(self.game_grid) - 2):
+                    if i == len(self.game_grid) - 2:
                         chain_continue_flag = False
-                    if (not chain_continue_flag):
+                    if not chain_continue_flag:
                         if len(vertical_chain) >= 3:
                             vertical_matches.append(vertical_chain)
                             break
@@ -254,14 +255,14 @@ class Game:
             horizontal_chain = []
             for j in range(len(self.game_grid[0]) - 1):  # check the 1 row
                 chain_continue_flag = False
-                if (self.game_grid[coord1[0]][j] == self.game_grid[coord1[0]][j + 1]):
-                    if ((coord1[0], j) not in horizontal_chain):
+                if self.game_grid[coord1[0]][j] == self.game_grid[coord1[0]][j + 1]:
+                    if (coord1[0], j) not in horizontal_chain:
                         horizontal_chain.append((coord1[0], j))
                     horizontal_chain.append((coord1[0], j + 1))
                     chain_continue_flag = True
-                if (j == len(self.game_grid[0]) - 2):
+                if j == len(self.game_grid[0]) - 2:
                     chain_continue_flag = False
-                if (not chain_continue_flag):
+                if not chain_continue_flag:
                     if len(horizontal_chain) >= 3:
                         horizontal_matches.append(horizontal_chain)
                         break
@@ -278,7 +279,7 @@ class Game:
                 self.add_score(match)
                 for (row, col) in match:
                     self.game_grid[row][col] = 0
-                    if (row in matched_cells):
+                    if row in matched_cells:
                         if col not in matched_cells[row]:
                             matched_cells[row].append(col)
                     else:
@@ -288,7 +289,7 @@ class Game:
                 self.add_score(match)
                 for (row, col) in match:
                     self.game_grid[row][col] = 0
-                    if (row in matched_cells):
+                    if row in matched_cells:
                         if col not in matched_cells[row]:
                             matched_cells[row].append(col)
                     else:
@@ -351,7 +352,6 @@ class Game:
         return self.error_status
 
 
-
 def play():
     moves_to_end = NUM_OF_MOVES_PER_GAME
     move_validity = False
@@ -379,8 +379,6 @@ def play():
             moves_to_end = 0
 
 
-
-
 arguments = len(sys.argv) - 1
 
 if arguments < 1 or sys.argv[1] == "nor":
@@ -390,18 +388,14 @@ if arguments < 1 or sys.argv[1] == "nor":
 
 else:
     game_mode = "exp"
-
     game_settings = []
 
-    with open('exp_game_setting.csv', newline='') as settings_file:
+    with open('exp_game_results.csv', newline='') as settings_file:
         settings_reader = csv.reader(settings_file)
         next(settings_reader)
         for setting in settings_reader:
-            print("Setting is:", tuple(setting[0]))
-            print("abc1", int(setting[0][0]))
-            print("abc2", int(setting[0][3]))
-            print("abc3", int(setting[1]))
-            game_settings.append([(int(setting[0][0]), int(setting[0][3])), int(setting[1]), EXP_REPEAT])
+            gs = setting[0].split(', ')
+            game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
 
     logging.info("Experiment Mode Active")
 
