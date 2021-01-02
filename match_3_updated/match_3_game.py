@@ -13,6 +13,7 @@ logging.basicConfig(filename='match3.log', filemode='w', level=logging.INFO)
 
 board_horizontal_matches = []
 board_vertical_matches = []
+game_mode = "nor"
 
 
 class Game:
@@ -122,7 +123,8 @@ class Game:
                     co_ords.append([(i, j), (i, j + 1)])
 
         self.possible_move_positions = co_ords
-        experiment.exp_total_possible_moves_count += len(co_ords)
+        if game_mode == "exp":
+            experiment.exp_total_possible_moves_count += len(co_ords)
         return co_ords
 
     # initialize the board with configured size and color ranges
@@ -145,13 +147,15 @@ class Game:
                 self.game_grid = np.random.randint(self.color_start_range, color_end_range, size=grid_size)
                 logging.debug("Generated board is \n" + str(self.game_grid))
                 count_reinit += 1
-                experiment.exp_total_num_regenerations +=1
+                if game_mode == "exp":
+                    experiment.exp_total_num_regenerations +=1
             else:
                 logging.info("No valid board generated after "+ str(NUM_OF_DEADLOCK_RETRIES) + " attempts. Setting skipped")
                 return False
 
         logging.info("Generated board is valid after " + str(count_reinit) + " attempts . Starting game")
-        logging.info("Cumulative regeneration count " + str(experiment.exp_total_num_regenerations) + "\n")
+        if game_mode == "exp":
+            logging.info("Cumulative regeneration count " + str(experiment.exp_total_num_regenerations) + "\n")
         return True
 
     # get the current board configuration
@@ -180,7 +184,8 @@ class Game:
         return new_board
 
     def shuffle_board(self, board):
-        experiment.exp_total_num_shuffles += 1
+        if game_mode == "exp":
+            experiment.exp_total_num_shuffles += 1
         board = board.ravel()
         np.random.shuffle(board)
         board = board.reshape(self.grid_size)
@@ -313,12 +318,13 @@ class Game:
         for i in new_arr:
             self.game_grid[i[0]][i[1]] = random.randint(self.color_start_range, self.color_end_range)
         print("Score : ", self.score)
-
+        logging.info("Score Updated:" + str(self.score))
         logging.debug("New tiles added :\n" + str(self.game_grid))
         avalanche = self.get_matches(self.game_grid)
         if avalanche:
-            experiment.exp_total_avalanche_match_count += 1
-            logging.info("Avalanche detected. Cumulative avalanche count: " + str(experiment.exp_total_avalanche_match_count))
+            if game_mode == "exp":
+                experiment.exp_total_avalanche_match_count += 1
+                logging.info("Avalanche detected. Cumulative avalanche count: " + str(experiment.exp_total_avalanche_match_count))
             print("Avalanche matches!")
             self.shift_tiles(board_horizontal_matches, board_vertical_matches)
         else:
@@ -336,8 +342,9 @@ class Game:
     def add_score(self, removed_tiles):
         logging.info("Score for the match is "+ str(len(removed_tiles)))
         self.score += len(removed_tiles)
-        experiment.exp_total_score += len(removed_tiles)
-        logging.info("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score ))
+        if game_mode == "exp":
+            experiment.exp_total_score += len(removed_tiles)
+            logging.info("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score ))
 
     def get_score(self):
         return self.score
@@ -372,7 +379,8 @@ def play():
         if not move_validity:
             print("Invalid move.")
         else:
-            experiment.exp_total_moves += 1
+            if game_mode == "exp":
+                experiment.exp_total_moves += 1
             moves_to_end -= 1
 
         if game_instance.get_error_status():
@@ -390,7 +398,7 @@ else:
     game_mode = "exp"
     game_settings = []
 
-    with open('exp_game_results.csv', newline='') as settings_file:
+    with open('exp_game_setting.csv', newline='') as settings_file:
         settings_reader = csv.reader(settings_file)
         next(settings_reader)
         for setting in settings_reader:
@@ -399,12 +407,12 @@ else:
 
     logging.info("Experiment Mode Active")
 
-experiment = Experiment()
 
+if game_mode == "exp":
+    print("Experiment mode")
+    experiment = Experiment()
 
 for each_setting in game_settings:
-
-    experiment.experiment_reinit()
     board_size = each_setting[0]
     color_range_end = each_setting[1]
     experiment_repeat = each_setting[2]
@@ -416,7 +424,8 @@ for each_setting in game_settings:
 
     # play for number of times configured
     for i in range(experiment_repeat):
-        logging.info("\tRepeating experiment " + str(i+1) + " of " + str(experiment_repeat) + " times.")
+        if game_mode == "exp":
+            logging.info("\tRepeating experiment " + str(i+1) + " of " + str(experiment_repeat) + " times.")
         # initialize the game and create a game instance
         game_instance = Game()
         init_status = game_instance.init_board(board_size, color_range_end)

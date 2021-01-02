@@ -9,21 +9,6 @@ from match_3_constants import  *
 class Experiment:
 
     def __init__(self):
-        print("Exp init")
-        file_exists = os.path.isfile("exp_game_results.csv")
-        print(file_exists)
-        with open('exp_game_results.csv', 'w', newline='') as csv_file:
-            fieldnames = ['Grid Size', 'Number of Colors',
-                          'Average Number of Regenerations until valid board generation',
-                          'Average Number of Moves until Shuffle occurs',
-                          'Average Number of Times Deadlock Occurred',
-                          'Average Score per Move',
-                          'Average Number of Possible Moves per Configuration',
-                          'Average Number of Avalanche matches occurred']
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-            writer.writeheader()
-
-    def experiment_reinit(self):
         self.exp_total_score = 0  # total score for a given setting across multiple plays
         self.exp_total_num_regenerations = 0  # count for getting total number of regenerations during init
         self.exp_total_num_shuffles = 0  # count for getting total number of shuffles
@@ -62,6 +47,10 @@ class Experiment:
         logging.info("Average possible moves per configuration: " + str(avg_possible_moves_per_config))
         logging.info("Average move per shuffle: " + str(avg_moves_per_shuffle))
 
+        print("Exp init")
+        file_exists = os.path.isfile("exp_game_results.csv")
+        print(file_exists)
+
         with open('exp_game_results.csv', 'a+',  newline='') as csv_file:
             fieldnames = ['Grid Size',
                           'Number of Colors',
@@ -72,6 +61,10 @@ class Experiment:
                           'Average Number of Possible Moves per Configuration',
                           'Average Number of Avalanche matches occurred']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if not file_exists:
+                print("File does not exist")
+                writer.writeheader()
+
             writer.writerow({'Grid Size': grid_size,
                              'Number of Colors': number_of_colors,
                              'Average Number of Regenerations until valid board generation': average_regeneration_for_init,
