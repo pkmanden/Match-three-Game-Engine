@@ -13,10 +13,12 @@ class Experiment:
         self.exp_total_num_regenerations = 0  # count for getting total number of regenerations during init
         self.exp_total_num_shuffles = 0  # count for getting total number of shuffles
         self.exp_total_moves = 0  # count for getting average number of moves per shuffle
-        #self.exp_total_deadlock_count = 0  # count of occurences of no moves
-        #self.exp_total_config_count = 0  # count of total number of board configurations
+        # self.exp_total_deadlock_count = 0  # count of occurences of no moves
+        # self.exp_total_config_count = 0  # count of total number of board configurations
         self.exp_total_possible_moves_count = 0  # count of total number of possible moves
         self.exp_total_avalanche_match_count = 0  # count the number of avalanche matches occurred
+        self.exp_init_invalid_match_three_count = 0 # count of total number of times matches occurred during board regeneration
+        self.exp_init_invalid_possible_moves = 0 # count of total number of times no possible moves found during board regeneration
 
     def store_experiment_result(self, grid_size, number_of_colors, experiment_repeats):
 
@@ -34,32 +36,42 @@ class Experiment:
         if self.exp_total_num_shuffles == 0:
             avg_moves_per_shuffle = math.inf
         else:
-            avg_moves_per_shuffle = (NUM_OF_MOVES_PER_GAME * experiment_repeats) / self.exp_total_num_shuffles
+            avg_moves_per_shuffle = (self.exp_total_moves) / self.exp_total_num_shuffles
 
         average_regeneration_for_init = self.exp_total_num_regenerations / experiment_repeats
-        average_deadlock_count = self.exp_total_num_shuffles / experiment_repeats
+        average_deadlock_count_per_setting = self.exp_total_num_shuffles / experiment_repeats
         avg_possible_moves_per_config = self.exp_total_possible_moves_count / (NUM_OF_MOVES_PER_GAME * experiment_repeats)
-        avg_avalanche_count = self.exp_total_avalanche_match_count / experiment_repeats
+        avg_avalanche_count_per_setting = self.exp_total_avalanche_match_count / experiment_repeats
 
         logging.info("Average game score is: " + str(score_per_move))
         logging.info("Average regeneration for init: " + str(average_regeneration_for_init))
-        logging.info("Average no deadlocks: " + str(average_deadlock_count))
+        logging.info("Average no deadlocks: " + str(average_deadlock_count_per_setting))
         logging.info("Average possible moves per configuration: " + str(avg_possible_moves_per_config))
         logging.info("Average move per shuffle: " + str(avg_moves_per_shuffle))
 
         print("Exp init")
-        file_exists = os.path.isfile("exp_game_results.csv")
+        file_exists = os.path.isfile("exp_game_results_2.csv")
         print(file_exists)
 
-        with open('exp_game_results.csv', 'a+',  newline='') as csv_file:
+        with open('exp_game_results_2.csv', 'a+',  newline='') as csv_file:
             fieldnames = ['Grid Size',
                           'Number of Colors',
-                          'Average Number of Regenerations until valid board generation',
-                          'Average Number of Moves until Shuffle occurs',
-                          'Average Number of Times Deadlock Occurred',
+                          'Total No. of Regenerations until valid board generation',
+                          'Total No. of Times Matches Occurred during init',
+                          'Total No. of Deadlocks during init',
+                          'Average No. of Regenerations until valid board generation',
+                          'Total No. of Shuffles/Deadlocks Occurred',
+                          'Average No. of Moves until Shuffle occurs',
+                          'Average No. of Deadlocks Occurred',
+                          'Total score per Game Setting',
+                          'Total Valid Moves Made',
                           'Average Score per Move',
-                          'Average Number of Possible Moves per Configuration',
-                          'Average Number of Avalanche matches occurred']
+                          'Total No. of Possible Moves',
+                          'Average No. of Possible Moves per Configuration',
+                          'Total No. of Avalanche Matches',
+                          'Average No. of Avalanche matches occurred',
+                          'Total Moves Available per Game Setting',
+                          'Experiment Repeat']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             if not file_exists:
                 print("File does not exist")
@@ -67,10 +79,20 @@ class Experiment:
 
             writer.writerow({'Grid Size': grid_size,
                              'Number of Colors': number_of_colors,
-                             'Average Number of Regenerations until valid board generation': average_regeneration_for_init,
-                             'Average Number of Moves until Shuffle occurs': avg_moves_per_shuffle,
-                             'Average Number of Times Deadlock Occurred': average_deadlock_count,
+                             'Total No. of Regenerations until valid board generation': self.exp_total_num_regenerations,
+                             'Total No. of Times Matches Occurred during init': self.exp_init_invalid_match_three_count,
+                             'Total No. of Deadlocks during init': self.exp_init_invalid_possible_moves,
+                             'Average No. of Regenerations until valid board generation': average_regeneration_for_init,
+                             'Total No. of Shuffles/Deadlocks Occurred': self.exp_total_num_shuffles,
+                             'Average No. of Moves until Shuffle occurs': avg_moves_per_shuffle,
+                             'Average No. of Deadlocks Occurred': average_deadlock_count_per_setting,
+                             'Total Valid Moves Made': self.exp_total_moves,
+                             'Total score per Game Setting': self.exp_total_score,
                              'Average Score per Move': score_per_move,
-                             'Average Number of Possible Moves per Configuration': avg_possible_moves_per_config,
-                             'Average Number of Avalanche matches occurred': avg_avalanche_count})
+                             'Total No. of Possible Moves': self.exp_total_possible_moves_count,
+                             'Average No. of Possible Moves per Configuration': avg_possible_moves_per_config,
+                             'Total No. of Avalanche Matches': self.exp_total_avalanche_match_count,
+                             'Average No. of Avalanche matches occurred': avg_avalanche_count_per_setting,
+                             'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
+                             'Experiment Repeat': EXP_REPEAT})
 

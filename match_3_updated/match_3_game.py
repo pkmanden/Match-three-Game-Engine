@@ -9,7 +9,7 @@ from match_3_agents import *
 import pandas as pd
 
 
-logging.basicConfig(filename='match3.log', filemode='w', level=logging.INFO)
+logging.basicConfig(filename='match3.log', filemode='w', level=logging.DEBUG)
 
 board_horizontal_matches = []
 board_vertical_matches = []
@@ -142,6 +142,11 @@ class Game:
         count_reinit = 0
         while self.check_matches(self.game_grid) or not self.find_moves():
             logging.info("Generated board is invalid. Regenerating board.")
+            if game_mode == "exp":
+                if self.check_matches(self.game_grid):
+                    experiment.exp_init_invalid_match_three_count += 1
+                else:
+                    experiment.exp_init_invalid_possible_moves += 1
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
                 logging.info("Regenerating attempt " + str(count_reinit + 1))
                 self.game_grid = np.random.randint(self.color_start_range, color_end_range, size=grid_size)
@@ -174,14 +179,14 @@ class Game:
             self.swap_tiles(coord1, coord2)
         return is_valid_move
 
-    def validate_board(self, board):
-        # global three_matches_count
-        new_board = board
-        # check whether the board contains any 3-matches
-        while self.check_matches(new_board):
-            # three_matches_count += 1
-            new_board = self.shuffle_board(new_board)
-        return new_board
+    # def validate_board(self, board):
+    #     # global three_matches_count
+    #     new_board = board
+    #     # check whether the board contains any 3-matches
+    #     while self.check_matches(new_board):
+    #         # three_matches_count += 1
+    #         new_board = self.shuffle_board(new_board)
+    #     return new_board
 
     def shuffle_board(self, board):
         if game_mode == "exp":
@@ -334,6 +339,7 @@ class Game:
                     self.game_grid =self.shuffle_board(self.game_grid)
                     count_reshuffle += 1
                     logging.info("Deadlock detected. Attempting " + str(count_reshuffle) + "th shuffle")
+                    print("Deadlock detected. Attempting ", count_reshuffle, "th shuffle.")
                 else:
                     logging.error("No valid board after " + str(NUM_OF_DEADLOCK_RETRIES) + " shuffles.")
                     self.error_status = True
@@ -408,16 +414,16 @@ else:
     logging.info("Experiment Mode Active")
 
 
-if game_mode == "exp":
-    print("Experiment mode")
+for each_setting in game_settings:
+    if game_mode == "exp":
+        print("Experiment mode")
     experiment = Experiment()
 
-for each_setting in game_settings:
     board_size = each_setting[0]
     color_range_end = each_setting[1]
     experiment_repeat = each_setting[2]
     logging.info("Starting game with board size " + str(board_size) + " and " + str(color_range_end - 1) + " colors." )
-
+    print("Starting game with board size ", board_size, " and ", (color_range_end - 1), " colors.")
     # initialize the agent to play the game
     logging.info("Initializing.")
     agent = Agent()
