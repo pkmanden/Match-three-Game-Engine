@@ -40,7 +40,7 @@ labels = ["Average No. of Regenerations until valid board generation per game se
           "Average No. of Deadlocks during init per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_1.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()  # clear plot
@@ -52,7 +52,7 @@ labels = ["Average No. of Shuffles/Deadlocks Occurred per game setting",
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
 
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_2.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -63,7 +63,7 @@ labels = ["Average Score per game setting",
           "Average Score per Move"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_3.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -72,7 +72,7 @@ plt.plot(x, y8)
 labels = ["Average No. of Valid Moves made per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_4.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -81,7 +81,7 @@ plt.plot(x, y9)
 labels = ["Average No. of Possible Moves per Configuration"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_5.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -90,7 +90,7 @@ plt.plot(x, y10)
 labels = ["Average No. of Avalanche matches per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_6.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -99,7 +99,7 @@ plt.plot(x, y11)
 labels = ["Probability that a deadlock will occur in the given game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 5 X 5")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/5_5_7.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -132,7 +132,7 @@ labels = ["Average No. of Regenerations until valid board generation per game se
           "Average No. of Deadlocks during init per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_1.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()  # clear plot
@@ -143,7 +143,7 @@ labels = ["Average No. of Shuffles/Deadlocks Occurred per game setting",
           "Average No. of Moves until Shuffle occurs per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_2.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -154,7 +154,7 @@ labels = ["Average Score per game setting",
           "Average Score per Move"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_3.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -163,7 +163,7 @@ plt.plot(x, y8)
 labels = ["Average No. of Valid Moves made per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_4.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -172,7 +172,7 @@ plt.plot(x, y9)
 labels = ["Average No. of Possible Moves per Configuration"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_5.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -181,7 +181,7 @@ plt.plot(x, y10)
 labels = ["Average No. of Avalanche matches per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_6.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -190,7 +190,7 @@ plt.plot(x, y11)
 labels = ["Probability that a deadlock will occur in the given game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 7 X 7")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/7_7_7.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 
@@ -225,7 +225,7 @@ labels = ["Average No. of Regenerations until valid board generation per game se
           "Average No. of Deadlocks during init per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_1.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()  # clear plot
@@ -236,7 +236,7 @@ labels = ["Average No. of Shuffles/Deadlocks Occurred per game setting",
           "Average No. of Moves until Shuffle occurs per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_2.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -247,7 +247,7 @@ labels = ["Average Score per game setting",
           "Average Score per Move"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_3.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -256,7 +256,7 @@ plt.plot(x, y8)
 labels = ["Average No. of Valid Moves made per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_4.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -265,7 +265,7 @@ plt.plot(x, y9)
 labels = ["Average No. of Possible Moves per Configuration"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_5.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -274,7 +274,7 @@ plt.plot(x, y10)
 labels = ["Average No. of Avalanche matches per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_6.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -283,7 +283,7 @@ plt.plot(x, y11)
 labels = ["Probability that a deadlock will occur in the given game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 10 X 10")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/10_10_7.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -317,7 +317,7 @@ labels = ["Average No. of Regenerations until valid board generation per game se
           "Average No. of Deadlocks during init per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_1.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()  # clear plot
@@ -328,7 +328,7 @@ labels = ["Average No. of Shuffles/Deadlocks Occurred per game setting",
           "Average No. of Moves until Shuffle occurs per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_2.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -339,7 +339,7 @@ labels = ["Average Score per game setting",
           "Average Score per Move"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_3.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -348,7 +348,7 @@ plt.plot(x, y8)
 labels = ["Average No. of Valid Moves made per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_4.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -357,7 +357,7 @@ plt.plot(x, y9)
 labels = ["Average No. of Possible Moves per Configuration"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_5.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -366,7 +366,7 @@ plt.plot(x, y10)
 labels = ["Average No. of Avalanche matches per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_6.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -375,7 +375,7 @@ plt.plot(x, y11)
 labels = ["Probability that a deadlock will occur in the given game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 15 X 15")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/15_15_7.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -409,7 +409,7 @@ labels = ["Average No. of Regenerations until valid board generation per game se
           "Average No. of Deadlocks during init per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_1.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()  # clear plot
@@ -420,7 +420,7 @@ labels = ["Average No. of Shuffles/Deadlocks Occurred per game setting",
           "Average No. of Moves until Shuffle occurs per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_2.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -431,7 +431,7 @@ labels = ["Average Score per game setting",
           "Average Score per Move"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_3.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -440,7 +440,7 @@ plt.plot(x, y8)
 labels = ["Average No. of Valid Moves made per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_4.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -449,7 +449,7 @@ plt.plot(x, y9)
 labels = ["Average No. of Possible Moves per Configuration"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_5.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -458,7 +458,7 @@ plt.plot(x, y10)
 labels = ["Average No. of Avalanche matches per game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_6.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
 
 plt.clf()
@@ -467,5 +467,5 @@ plt.plot(x, y11)
 labels = ["Probability that a deadlock will occur in the given game setting"]
 plt.xlabel("Number of Colors")
 plt.title("Grid Size 20 X 20")
-lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3))
+lgd = plt.legend(labels, loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 plt.savefig('plots_1/20_20_7.png', bbox_extra_artists=(lgd,), bbox_inches='tight')
