@@ -1,5 +1,6 @@
 import random
 
+
 class Agent:
     moves = []
     game_board = []
@@ -12,3 +13,4 @@ class Agent:
     def select_move(self, config):
         move = random.choice(self.current_solution)
         return move
+

@@ -1,12 +1,14 @@
 from match_3_experiment import *
 import csv
+import random
 import sys
 import numpy as np
 import collections
 from match_3_constants import *
 from match_3_agents import *
+import pandas as pd
 
-logging.basicConfig(filename='match3.log', level=logging.DEBUG)
+logging.basicConfig(filename='../match3.log', filemode='w', level=logging.INFO)
 
 board_horizontal_matches = []
 board_vertical_matches = []
@@ -129,18 +131,18 @@ class Game:
             # log_stages("Game", self.grid_size, len(np.unique(self.game_grid)), "Possible/Playable Moves", possible_moves=len(co_ords))
         return co_ords
 
-    # def generate_random_board(self):
-    #     m, n = self.grid_size
-    #     # print("total tiles : ", m * n)
-    #     total_tiles = m * n
-    #     temp_board_1 = np.arange(self.color_start_range, self.color_end_range + 1)
-    #     # print("temp_board_1: ", temp_board_1)
-    #     temp_board_2 = np.random.randint(self.color_start_range, self.color_end_range + 1, size=(total_tiles - len(temp_board_1)))
-    #     # print("temp_board_2: ", temp_board_2)
-    #     board = np.concatenate((temp_board_1, temp_board_2), axis=None)
-    #     np.random.shuffle(board)
-    #     board = board.reshape(self.grid_size)
-    #     return board
+    def generate_random_board(self):
+        m, n = self.grid_size
+        # print("total tiles : ", m * n)
+        total_tiles = m * n
+        temp_board_1 = np.arange(self.color_start_range, self.color_end_range + 1)
+        # print("temp_board_1: ", temp_board_1)
+        temp_board_2 = np.random.randint(self.color_start_range, self.color_end_range + 1, size=(total_tiles - len(temp_board_1)))
+        # print("temp_board_2: ", temp_board_2)
+        board = np.concatenate((temp_board_1, temp_board_2), axis=None)
+        np.random.shuffle(board)
+        board = board.reshape(self.grid_size)
+        return board
 
     # initialize the board with configured size and color ranges
     def init_board(self, grid_size, color_end_range):
@@ -149,8 +151,7 @@ class Game:
         # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
 
-        # self.game_grid = self.generate_random_board()
-        self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
+        self.game_grid = self.generate_random_board()
 
         logging.debug("Generated board is \n" + str(self.game_grid))
         # to consider a board as valid, below conditions are checked:
@@ -162,8 +163,8 @@ class Game:
             logging.debug("Generated board is invalid. Regenerating board.")
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
                 logging.debug("Regenerating attempt " + str(count_reinit + 1))
-                self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
-                # self.game_grid = self.generate_random_board()
+                # self.game_grid = np.random.randint(self.color_start_range, self.color_end_range, size=grid_size)
+                self.game_grid = self.generate_random_board()
                 logging.debug("Generated board is \n" + str(self.game_grid))
                 count_reinit += 1
                 if game_mode == "exp":
@@ -180,8 +181,7 @@ class Game:
                 return False
 
         logging.debug("Generated board is valid after " + str(count_reinit) + " attempts . Starting game")
-        logging.debug("Starting game with board size " + str(board_size) + " and " + str(len(np.unique(self.game_grid))) + " colors.")
-        print("Starting game with board size ", board_size, " and ", len(np.unique(self.game_grid)), " colors.")
+
         if game_mode == "exp":
             # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Start")
             experiment.exp_total_game_starts += 1
@@ -360,7 +360,7 @@ class Game:
                     count_reshuffle += 1
                     logging.debug("Deadlock detected. Attempting " + str(count_reshuffle) + "th shuffle")
                     # log_stages("Game", self.grid_size, len(np.unique(self.game_grid)), "Deadlock", score=self.score)
-                    # print("Deadlock detected. Attempting ", count_reshuffle, "th shuffle.")
+                    print("Deadlock detected. Attempting ", count_reshuffle, "th shuffle.")
                 else:
                     logging.error("No valid board after " + str(NUM_OF_DEADLOCK_RETRIES) + " shuffles.")
                     self.error_status = True
@@ -425,7 +425,7 @@ else:
     game_mode = "exp"
     game_settings = []
 
-    with open('exp_game_setting.csv', newline='') as settings_file:
+    with open('../exp_game_setting.csv', newline='') as settings_file:
         settings_reader = csv.reader(settings_file)
         next(settings_reader)
         for setting in settings_reader:
@@ -443,6 +443,8 @@ for each_setting in game_settings:
     print("board_size : ", board_size)
     color_range_end = each_setting[1]
     experiment_repeat = each_setting[2]
+    logging.debug("Starting game with board size " + str(board_size) + " and " + str(color_range_end) + " colors.")
+    print("Starting game with board size ", board_size, " and ", (color_range_end), " colors.")
     # initialize the agent to play the game
     logging.debug("Initializing.")
     agent = Agent()
