@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-dataframe = pd.read_csv("exp_game_results_3.csv")
+dataframe = pd.read_csv("exp_game_results_old.csv")
 df1 = dataframe[dataframe['Grid Size'] == "(5, 5)"]
 df2 = dataframe[dataframe['Grid Size'] == "(7, 7)"]
 df3 = dataframe[dataframe['Grid Size'] == "(10, 10)"]

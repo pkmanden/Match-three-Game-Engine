@@ -11,9 +11,8 @@ class Agent:
         self.current_solution = solution
 
     def select_move(self, config):
-        move = random.choice(self.current_solution)
         # =========change for experiment 2=============================
-        # move = self.current_solution[0]
+        move = self.current_solution[0]
         # =============================================================
         return move
 
