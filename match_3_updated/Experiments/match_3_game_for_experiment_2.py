@@ -1,13 +1,9 @@
-from joblib import Parallel, delayed
-
-from match_3_experiment import *
-import csv
-import sys
-import numpy as np
-import random
 import collections
-from match_3_constants_exp_2 import *
+import multiprocessing
+import numpy as np
+from joblib import Parallel, delayed
 from match_3_agents_exp_2 import *
+from match_3_experiment import *
 
 # logging.basicConfig(filename='match_3_experiment_3.log', filemode='w', level=logging.DEBUG)
 
@@ -30,8 +26,6 @@ class Game:
     color_start_range = 1
     color_end_range = 5
     grid_size = 5, 5
-
-
     error_status = False
 
     def check_matches(self, board):
@@ -189,7 +183,7 @@ class Game:
         # logging.debug("Generated board is valid after " + str(count_reinit) + " attempts . Starting game")
         # logging.debug("Starting game with board size " + str(board_size) + " and " + str(len(np.unique(self.game_grid))) + " colors.")
         print("Starting game with board size ", board_size, " and ", len(np.unique(self.game_grid)), " colors.")
-        # print("Board: \n", self.game_grid)
+        print("Board: \n", self.game_grid)
         # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Start")
         experiment.exp_total_game_starts += 1
         # logging.debug("Cumulative regeneration count " + str(experiment.exp_total_num_regenerations) + "\n")
@@ -379,19 +373,23 @@ class Game:
 
     def add_score(self, removed_tiles, param):
         # logging.debug("Score for the match is " + str(len(removed_tiles)))
-        # print(removed_tiles)
+        unique_tiles = []
+        for tile in removed_tiles:
+            unique_tiles += tile
+        unique_tiles = set(unique_tiles)
         if param == "UserMove":
             experiment.total_user_move_count += 1
         if param == "Avalanche":
             experiment.total_avalanche_count += 1
         # move_score = 0
-        for match in removed_tiles:
-            self.score += len(match)
-            if param == "UserMove":
-                experiment.total_user_move_score += len(match)
-            if param == "Avalanche":
-                experiment.total_avalanche_score += len(match)
-            experiment.exp_total_score += len(match)
+
+        # for match in removed_tiles:
+        self.score += len(unique_tiles)
+        if param == "UserMove":
+            experiment.total_user_move_score += len(unique_tiles)
+        if param == "Avalanche":
+            experiment.total_avalanche_score += len(unique_tiles)
+        experiment.exp_total_score += len(unique_tiles)
             # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
 
     def get_score(self):
@@ -425,7 +423,7 @@ def play():
         # game_instance.input_tiles(move)
         # logging.info("Game Ended. Score : " + str(game_instance.score))
         # ============== === === === === === == ============
-        moves_to_end = NUM_OF_MOVES_PER_GAME
+        moves_to_end = EXP_2_NUM_OF_MOVES_PER_GAME
         move_validity = False
         next_move = []
 
@@ -437,6 +435,7 @@ def play():
             # get next move from the agent
             agent.prepare_agent(game_instance.get_all_possible_moves())
             next_move = agent.select_move(current_config)
+            print(f'Selected Move {next_move}')
             # logging.debug("Selected Move " + str(next_move))
 
             # check if selected move is valid
@@ -451,42 +450,44 @@ def play():
                 moves_to_end = 0
 
 
-# arguments = len(sys.argv) - 1
-#
-# if arguments < 1 or sys.argv[1] == "nor":
-#     game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
-#     game_mode = "nor"
-#     # logging.debug("Normal Mode Active")
+if __name__ == "__main__":
+    num_cores = multiprocessing.cpu_count()
+    # arguments = len(sys.argv) - 1
+    #
+    # if arguments < 1 or sys.argv[1] == "nor":
+    #     game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
+    #     game_mode = "nor"
+    #     # logging.debug("Normal Mode Active")
 
-# else:
-game_settings = []
-with open('exp_2_game_setting.csv', newline='') as settings_file:
-    settings_reader = csv.reader(settings_file)
-    next(settings_reader)
-    for setting in settings_reader:
-        gs = setting[0].split(', ')
-        game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
+    # else:
+    game_settings = []
+    with open('exp_2_game_setting.csv', newline='') as settings_file:
+        settings_reader = csv.reader(settings_file)
+        next(settings_reader)
+        for setting in settings_reader:
+            gs = setting[0].split(', ')
+            game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_2_REPEAT])
 
-# logging.debug("Experiment Mode Active")
+    # logging.debug("Experiment Mode Active")
 
-for each_setting in game_settings:
-    user_move_count = 0
-    avalanche_count = 0
-    experiment = Experiment()
+    for each_setting in game_settings:
+        user_move_count = 0
+        avalanche_count = 0
+        experiment = Experiment()
 
-    board_size = each_setting[0]
-    color_range_end = each_setting[1]
-    experiment_repeat = each_setting[2]
-    # initialize the agent to play the game
-    # logging.debug("Initializing.")
-    agent = Agent()
+        board_size = each_setting[0]
+        color_range_end = each_setting[1]
+        experiment_repeat = each_setting[2]
+        # initialize the agent to play the game
+        # logging.debug("Initializing.")
+        agent = Agent()
 
-    # play for number of times configured
-    Parallel(n_jobs=2, require='sharedmem')(delayed(play)() for i in range(experiment_repeat))
-    # for i in range(experiment_repeat):
-    #     play()
-    # logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
-    # logging.info(str(board_size) + "|" + str(color_range_end) + "|" + str(actual_num_colors_start) + "|" + str(experiment.total_user_move_count) + "|" + str(experiment.total_user_move_score) + "|" + str(experiment.total_avalanche_count) + "|" + str(experiment.total_avalanche_score) + "|" + str(experiment.exp_total_score))
-    # log_stages("Game", board_size, color_range_end, len(np.unique(game_instance.game_grid)), score=move_score)
+        # play for number of times configured
+        Parallel(n_jobs=num_cores, require='sharedmem')(delayed(play)() for i in range(experiment_repeat))
+        # for i in range(experiment_repeat):
+        #     play()
+        # logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
+        # logging.info(str(board_size) + "|" + str(color_range_end) + "|" + str(actual_num_colors_start) + "|" + str(experiment.total_user_move_count) + "|" + str(experiment.total_user_move_score) + "|" + str(experiment.total_avalanche_count) + "|" + str(experiment.total_avalanche_score) + "|" + str(experiment.exp_total_score))
+        # log_stages("Game", board_size, color_range_end, len(np.unique(game_instance.game_grid)), score=move_score)
 
-    experiment.store_experiment_2_result(board_size, color_range_end, actual_num_colors_start)
+        experiment.store_experiment_2_result(board_size, color_range_end, actual_num_colors_start)

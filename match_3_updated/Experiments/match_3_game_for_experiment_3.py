@@ -6,7 +6,7 @@ import sys
 import numpy as np
 import random
 import collections
-from match_3_constants_exp_3 import *
+from match_3_constants_exp import *
 from match_3_agents import *
 
 logging.basicConfig(filename='match_3_experiment_3.log', filemode='w', level=logging.DEBUG)
@@ -146,14 +146,14 @@ class Game:
     # initialize the board with configured size and color ranges
     def init_board(self, grid_size, color_end_range):
         # np.random.seed(0)
-        r = np.random.RandomState(1234)
+        # r = np.random.RandomState(1234)
         self.color_end_range = color_end_range
         self.grid_size = grid_size
         # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
 
         # self.game_grid = self.generate_random_board()
-        self.game_grid = r.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
+        self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
 
         # logging.debug("Generated board is \n" + str(self.game_grid))
 
@@ -166,7 +166,7 @@ class Game:
             # logging.debug("Generated board is invalid. Regenerating board.")
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
                 # logging.debug("Regenerating attempt " + str(count_reinit + 1))
-                self.game_grid = r.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
+                self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
                 # self.game_grid = self.generate_random_board()
                 # logging.debug("Generated board is \n" + str(self.game_grid))
                 count_reinit += 1
@@ -376,20 +376,24 @@ class Game:
     def add_score(self, removed_tiles, param):
         # logging.debug("Score for the match is " + str(len(removed_tiles)))
         # print(removed_tiles)
+        unique_tiles = []
+        for tile in removed_tiles:
+            unique_tiles += tile
+        unique_tiles = set(unique_tiles)
         if param == "UserMove":
             experiment.total_user_move_count += 1
         if param == "Avalanche":
             experiment.total_avalanche_count += 1
             experiment.avalanche_per_move += 1
-        for match in removed_tiles:
-            self.score += len(match)
-            experiment.move_score += len(match)
-            if param == "UserMove":
-                experiment.total_user_move_score += len(match)
-            if param == "Avalanche":
-                experiment.total_avalanche_score += len(match)
-            experiment.exp_total_score += len(match)
-            # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
+        # for match in removed_tiles:
+        self.score += len(unique_tiles)
+        experiment.move_score += len(unique_tiles)
+        if param == "UserMove":
+            experiment.total_user_move_score += len(unique_tiles)
+        if param == "Avalanche":
+            experiment.total_avalanche_score += len(unique_tiles)
+        experiment.exp_total_score += len(unique_tiles)
+        # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
         # experiment.move_score = move_score
 
     def get_score(self):
@@ -418,7 +422,7 @@ def play():
         global actual_num_colors_start
         actual_num_colors_start = len(np.unique(game_instance.game_grid))
         # ============== === === === === === == ============
-        moves_to_end = NUM_OF_MOVES_PER_GAME
+        moves_to_end = EXP_3_NUM_OF_MOVES_PER_GAME
         move_validity = False
         next_move = []
         global selected_move
@@ -462,7 +466,7 @@ with open('exp_3_game_setting.csv', newline='') as settings_file:
     next(settings_reader)
     for setting in settings_reader:
         gs = setting[0].split(', ')
-        game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
+        game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_3_REPEAT])
 
 # logging.debug("Experiment Mode Active")
 

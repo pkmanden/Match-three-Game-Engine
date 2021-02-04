@@ -3,7 +3,7 @@ import logging
 import csv
 import os
 import math
-from match_3_constants_exp_3 import *
+from match_3_constants_exp import *
 
 
 class Experiment:
@@ -48,9 +48,9 @@ class Experiment:
         else:
             avg_moves_per_shuffle = self.exp_total_moves / self.exp_total_num_shuffles
 
-        average_regeneration_for_init = self.exp_total_num_regenerations / EXP_REPEAT
-        average_deadlock_count_per_setting = self.exp_total_num_shuffles / EXP_REPEAT
-        avg_avalanche_count_per_setting = self.exp_total_avalanche_match_count / EXP_REPEAT
+        average_regeneration_for_init = self.exp_total_num_regenerations / EXP_1_REPEAT
+        average_deadlock_count_per_setting = self.exp_total_num_shuffles / EXP_1_REPEAT
+        avg_avalanche_count_per_setting = self.exp_total_avalanche_match_count / EXP_1_REPEAT
 
         print("Exp init")
         file_exists = os.path.isfile("exp_game_results_1.csv")
@@ -63,14 +63,14 @@ class Experiment:
                           'Total No. of Regenerations until valid board generation',
                           'Total No. of Times Matches Occurred during init',
                           'Total No. of Deadlocks during init',
-                          'Total No. of Times Game Started',
+                          'Total No. of Times MatchThreeGame Started',
                           'Total No. of Shuffles/Deadlocks Occurred',
                           'Average No. of Moves until Shuffle occurs per game setting',
-                          'Total score per Game Setting',
+                          'Total score per MatchThreeGame Setting',
                           'Total Valid Moves Made',
                           'Total No. of Possible/Playable Moves',
                           'Total No. of Avalanche Matches',
-                          'Total Moves Available per Game Setting',
+                          'Total Moves Available per MatchThreeGame Setting',
                           'Experiment Repeat']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             if not file_exists:
@@ -83,15 +83,15 @@ class Experiment:
                              'Total No. of Regenerations until valid board generation': self.exp_total_num_regenerations,
                              'Total No. of Times Matches Occurred during init': self.exp_init_invalid_match_three_count,
                              'Total No. of Deadlocks during init': self.exp_init_deadlock,
-                             'Total No. of Times Game Started': self.exp_total_game_starts,
+                             'Total No. of Times MatchThreeGame Started': self.exp_total_game_starts,
                              'Total No. of Shuffles/Deadlocks Occurred': self.exp_total_num_shuffles,
                              'Average No. of Moves until Shuffle occurs per game setting': avg_moves_per_shuffle,
                              'Total Valid Moves Made': self.exp_total_moves,
-                             'Total score per Game Setting': self.exp_total_score,
+                             'Total score per MatchThreeGame Setting': self.exp_total_score,
                              'Total No. of Possible/Playable Moves': self.exp_total_possible_moves_count,
                              'Total No. of Avalanche Matches': self.exp_total_avalanche_match_count,
-                             'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
-                             'Experiment Repeat': EXP_REPEAT})
+                             'Total Moves Available per MatchThreeGame Setting': EXP_1_NUM_OF_MOVES_PER_GAME,
+                             'Experiment Repeat': EXP_1_REPEAT})
 
     def store_experiment_2_result(self, grid_size, max_colors, actual_colors):
         file_exists = os.path.isfile("exp_game_results_2.csv")
@@ -106,7 +106,7 @@ class Experiment:
                           'Total Avalanche count',
                           'Total non-deterministic score',
                           'Total score',
-                          'Total Moves Available per Game Setting',
+                          'Total Moves Available per MatchThreeGame Setting',
                           'Experiment Repeat']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             if not file_exists:
@@ -121,8 +121,8 @@ class Experiment:
                              'Total Avalanche count': self.total_avalanche_count,
                              'Total non-deterministic score': self.total_avalanche_score,
                              'Total score': self.exp_total_score,
-                             'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
-                             'Experiment Repeat': EXP_REPEAT})
+                             'Total Moves Available per MatchThreeGame Setting': EXP_2_NUM_OF_MOVES_PER_GAME,
+                             'Experiment Repeat': EXP_2_REPEAT})
 
     def store_experiment_3_result(self, grid_size, max_colors, actual_colors, selected_move):
         file_exists = os.path.isfile("exp_game_results_3.csv")
@@ -137,7 +137,7 @@ class Experiment:
                           'Total score',
                           'Selected Move',
                           'Avalanche per selected move',
-                          'Total Moves Available per Game Setting',
+                          'Total Moves Available per MatchThreeGame Setting',
                           'Experiment Repeat']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             if not file_exists:
@@ -153,5 +153,5 @@ class Experiment:
                              'Total score': self.exp_total_score,
                              'Selected Move': selected_move,
                              'Avalanche per selected move': self.avalanche_per_move,
-                             'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
-                             'Experiment Repeat': EXP_REPEAT})
+                             'Total Moves Available per MatchThreeGame Setting': EXP_3_NUM_OF_MOVES_PER_GAME,
+                             'Experiment Repeat': EXP_3_REPEAT})

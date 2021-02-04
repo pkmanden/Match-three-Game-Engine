@@ -1,14 +1,10 @@
-from joblib import Parallel, delayed
-
-from match_3_experiment import *
-import csv
-import random
-import sys
-import numpy as np
 import collections
-from match_3_constants_exp_1 import *
+import multiprocessing
+import numpy as np
+from joblib import Parallel, delayed
 from match_3_agents import *
-import pandas as pd
+from match_3_constants_exp import *
+from match_3_experiment import *
 
 logging.basicConfig(filename='../match3.log', filemode='w', level=logging.INFO)
 
@@ -297,9 +293,11 @@ class Game:
     def shift_tiles(self, row_matches, column_matches):
         return_error_flag = False
         matched_cells = {}
+        total_matches = row_matches + column_matches
+        self.add_score(total_matches)
         if row_matches:
             for match in row_matches:
-                self.add_score(match)
+                # self.add_score(match)
                 for (row, col) in match:
                     self.game_grid[row][col] = 0
                     if row in matched_cells:
@@ -309,7 +307,7 @@ class Game:
                         matched_cells[row] = [col]
         if column_matches:
             for match in column_matches:
-                self.add_score(match)
+                # self.add_score(match)
                 for (row, col) in match:
                     self.game_grid[row][col] = 0
                     if row in matched_cells:
@@ -363,7 +361,11 @@ class Game:
 
     def add_score(self, removed_tiles):
         logging.debug("Score for the match is " + str(len(removed_tiles)))
-        self.score += len(removed_tiles)
+        unique_tiles = []
+        for tile in removed_tiles:
+            unique_tiles += tile
+        unique_tiles = set(unique_tiles)
+        self.score += len(unique_tiles)
         experiment.exp_total_score += len(removed_tiles)
         # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
 
@@ -389,7 +391,7 @@ def play():
     if init_status:
         global actual_num_colors_start
         actual_num_colors_start = len(np.unique(game_instance.game_grid))
-        moves_to_end = NUM_OF_MOVES_PER_GAME
+        moves_to_end = EXP_1_NUM_OF_MOVES_PER_GAME
         move_validity = False
         next_move = []
 
@@ -414,40 +416,41 @@ def play():
             if game_instance.get_error_status():
                 moves_to_end = 0
 
+if __name__ == "__main__":
+    num_cores = multiprocessing.cpu_count()
+    # arguments = len(sys.argv) - 1
+    #
+    # if arguments < 1 or sys.argv[1] == "nor":
+    #     game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
+    #
+    # else:
+    #     game_mode = "exp"
+    game_settings = []
+    with open('exp_1_game_setting.csv', newline='') as settings_file:
+        settings_reader = csv.reader(settings_file)
+        next(settings_reader)
+        for setting in settings_reader:
+            gs = setting[0].split(', ')
+            game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_1_REPEAT])
 
-# arguments = len(sys.argv) - 1
-#
-# if arguments < 1 or sys.argv[1] == "nor":
-#     game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
-#
-# else:
-#     game_mode = "exp"
-game_settings = []
-with open('exp_1_game_setting.csv', newline='') as settings_file:
-    settings_reader = csv.reader(settings_file)
-    next(settings_reader)
-    for setting in settings_reader:
-        gs = setting[0].split(', ')
-        game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
+    logging.debug("Experiment Mode Active")
 
-logging.debug("Experiment Mode Active")
+    for each_setting in game_settings:
+        experiment = Experiment()
+        board_size = each_setting[0]
+        print("board_size : ", board_size)
+        color_range_end = each_setting[1]
+        experiment_repeat = each_setting[2]
+        logging.debug("Starting game with board size " + str(board_size) + " and " + str(color_range_end) + " colors.")
+        print("Starting game with board size ", board_size, " and ", (color_range_end), " colors.")
+        # initialize the agent to play the game
+        logging.debug("Initializing.")
+        agent = Agent()
 
-for each_setting in game_settings:
-    experiment = Experiment()
-    board_size = each_setting[0]
-    print("board_size : ", board_size)
-    color_range_end = each_setting[1]
-    experiment_repeat = each_setting[2]
-    logging.debug("Starting game with board size " + str(board_size) + " and " + str(color_range_end) + " colors.")
-    print("Starting game with board size ", board_size, " and ", (color_range_end), " colors.")
-    # initialize the agent to play the game
-    logging.debug("Initializing.")
-    agent = Agent()
+        # play for number of times configured
+        Parallel(n_jobs=num_cores, require='sharedmem')(delayed(play)() for i in range(experiment_repeat))
+        # for i in range(experiment_repeat):
+        #     logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
+        #     play()
 
-    # play for number of times configured
-    Parallel(n_jobs=4, require='sharedmem')(delayed(play)() for i in range(experiment_repeat))
-    # for i in range(experiment_repeat):
-    #     logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
-    #     play()
-
-    experiment.store_experiment_1_result(board_size, color_range_end, actual_num_colors_start)
+        experiment.store_experiment_1_result(board_size, color_range_end, actual_num_colors_start)

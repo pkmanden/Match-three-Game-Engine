@@ -370,11 +370,14 @@ class Game:
 
     def add_score(self, removed_tiles):
         logging.debug("Score for the match is " + str(len(removed_tiles)))
-        for match in removed_tiles:
-            self.score += len(match)
-            if game_mode == "exp":
-                experiment.exp_total_score += len(match)
-            # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
+        unique_tiles = []
+        for tile in removed_tiles:
+            unique_tiles += tile
+        unique_tiles = set(unique_tiles)
+        self.score += len(unique_tiles)
+        if game_mode == "exp":
+            experiment.exp_total_score += len(unique_tiles)
+        # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
 
     def get_score(self):
         return self.score
@@ -417,48 +420,43 @@ def play():
             moves_to_end = 0
 
 
-arguments = len(sys.argv) - 1
+if __name__ == '__main__':
+    arguments = len(sys.argv) - 1
+    if arguments < 1 or sys.argv[1] == "nor":
+        game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
+        game_mode = "nor"
+        logging.debug("Normal Mode Active")
+    else:
+        game_mode = "exp"
+        game_settings = []
+        with open('exp_game_setting.csv', newline='') as settings_file:
+            settings_reader = csv.reader(settings_file)
+            next(settings_reader)
+            for setting in settings_reader:
+                gs = setting[0].split(', ')
+                game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
 
-if arguments < 1 or sys.argv[1] == "nor":
-    game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
-    game_mode = "nor"
-    logging.debug("Normal Mode Active")
+        logging.debug("Experiment Mode Active")
 
-else:
-    game_mode = "exp"
-    game_settings = []
-
-    with open('exp_game_setting.csv', newline='') as settings_file:
-        settings_reader = csv.reader(settings_file)
-        next(settings_reader)
-        for setting in settings_reader:
-            gs = setting[0].split(', ')
-            game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
-
-    logging.debug("Experiment Mode Active")
-
-for each_setting in game_settings:
-    if game_mode == "exp":
-        print("Experiment mode")
-    experiment = Experiment()
-
-    board_size = each_setting[0]
-    print("board_size : ", board_size)
-    color_range_end = each_setting[1]
-    experiment_repeat = each_setting[2]
-    # initialize the agent to play the game
-    logging.debug("Initializing.")
-    agent = Agent()
-
-    # play for number of times configured
-    for i in range(experiment_repeat):
+    for each_setting in game_settings:
         if game_mode == "exp":
-            logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
-        # initialize the game and create a game instance
-        game_instance = Game()
-        init_status = game_instance.init_board(board_size, color_range_end)
-        if init_status:
-            play()
-
-    if game_mode == "exp":
-        experiment.store_experiment_result(board_size, color_range_end, experiment_repeat)
+            print("Experiment mode")
+        experiment = Experiment()
+        board_size = each_setting[0]
+        print("board_size : ", board_size)
+        color_range_end = each_setting[1]
+        experiment_repeat = each_setting[2]
+        # initialize the agent to play the game
+        logging.debug("Initializing.")
+        agent = Agent()
+        # play for number of times configured
+        for i in range(experiment_repeat):
+            if game_mode == "exp":
+                logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
+            # initialize the game and create a game instance
+            game_instance = Game()
+            init_status = game_instance.init_board(board_size, color_range_end)
+            if init_status:
+                play()
+        if game_mode == "exp":
+            experiment.store_experiment_result(board_size, color_range_end, experiment_repeat)
