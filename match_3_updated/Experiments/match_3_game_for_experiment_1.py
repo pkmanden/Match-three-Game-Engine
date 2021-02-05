@@ -127,18 +127,18 @@ class Game:
         # log_stages("Game", self.grid_size, len(np.unique(self.game_grid)), "Possible/Playable Moves", possible_moves=len(co_ords))
         return co_ords
 
-    def generate_random_board(self):
-        m, n = self.grid_size
-        # print("total tiles : ", m * n)
-        total_tiles = m * n
-        temp_board_1 = np.arange(self.color_start_range, self.color_end_range + 1)
-        # print("temp_board_1: ", temp_board_1)
-        temp_board_2 = np.random.randint(self.color_start_range, self.color_end_range + 1, size=(total_tiles - len(temp_board_1)))
-        # print("temp_board_2: ", temp_board_2)
-        board = np.concatenate((temp_board_1, temp_board_2), axis=None)
-        np.random.shuffle(board)
-        board = board.reshape(self.grid_size)
-        return board
+    # def generate_random_board(self):
+    #     m, n = self.grid_size
+    #     # print("total tiles : ", m * n)
+    #     total_tiles = m * n
+    #     temp_board_1 = np.arange(self.color_start_range, self.color_end_range + 1)
+    #     # print("temp_board_1: ", temp_board_1)
+    #     temp_board_2 = np.random.randint(self.color_start_range, self.color_end_range + 1, size=(total_tiles - len(temp_board_1)))
+    #     # print("temp_board_2: ", temp_board_2)
+    #     board = np.concatenate((temp_board_1, temp_board_2), axis=None)
+    #     np.random.shuffle(board)
+    #     board = board.reshape(self.grid_size)
+    #     return board
 
     # initialize the board with configured size and color ranges
     def init_board(self, grid_size, color_end_range):
@@ -147,7 +147,8 @@ class Game:
         # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
 
-        self.game_grid = self.generate_random_board()
+        # self.game_grid = self.generate_random_board()
+        self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
 
         logging.debug("Generated board is \n" + str(self.game_grid))
         # to consider a board as valid, below conditions are checked:
@@ -159,8 +160,8 @@ class Game:
             logging.debug("Generated board is invalid. Regenerating board.")
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
                 logging.debug("Regenerating attempt " + str(count_reinit + 1))
-                # self.game_grid = np.random.randint(self.color_start_range, self.color_end_range, size=grid_size)
-                self.game_grid = self.generate_random_board()
+                self.game_grid = np.random.randint(self.color_start_range, self.color_end_range, size=grid_size)
+                # self.game_grid = self.generate_random_board()
                 logging.debug("Generated board is \n" + str(self.game_grid))
                 count_reinit += 1
                 # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Regenerate")

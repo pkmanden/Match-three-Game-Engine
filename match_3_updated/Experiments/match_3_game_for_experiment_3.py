@@ -9,7 +9,7 @@ import collections
 from match_3_constants_exp import *
 from match_3_agents import *
 
-logging.basicConfig(filename='match_3_experiment_3.log', filemode='w', level=logging.DEBUG)
+# logging.basicConfig(filename='match_3_experiment_3.log', filemode='w', level=logging.DEBUG)
 
 board_horizontal_matches = []
 board_vertical_matches = []

@@ -183,7 +183,7 @@ class Game:
         # logging.debug("Generated board is valid after " + str(count_reinit) + " attempts . Starting game")
         # logging.debug("Starting game with board size " + str(board_size) + " and " + str(len(np.unique(self.game_grid))) + " colors.")
         print("Starting game with board size ", board_size, " and ", len(np.unique(self.game_grid)), " colors.")
-        print("Board: \n", self.game_grid)
+        # print("Board: \n", self.game_grid)
         # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Start")
         experiment.exp_total_game_starts += 1
         # logging.debug("Cumulative regeneration count " + str(experiment.exp_total_num_regenerations) + "\n")
@@ -435,7 +435,7 @@ def play():
             # get next move from the agent
             agent.prepare_agent(game_instance.get_all_possible_moves())
             next_move = agent.select_move(current_config)
-            print(f'Selected Move {next_move}')
+            # print(f'Selected Move {next_move}')
             # logging.debug("Selected Move " + str(next_move))
 
             # check if selected move is valid
