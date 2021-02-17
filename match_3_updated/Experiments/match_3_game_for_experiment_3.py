@@ -409,7 +409,7 @@ class Game:
         return self.error_status
 
 
-actual_num_colors_start = 0
+# actual_num_colors_start = 0
 selected_move = []
 
 
@@ -419,8 +419,7 @@ def play():
     init_status = game_instance.init_board(board_size, color_range_end)
     if init_status:
         # ============== Change for experiment 2=============
-        global actual_num_colors_start
-        actual_num_colors_start = len(np.unique(game_instance.game_grid))
+        experiment.actual_num_colors_start = len(np.unique(game_instance.game_grid))
         # ============== === === === === === == ============
         moves_to_end = EXP_3_NUM_OF_MOVES_PER_GAME
         move_validity = False
@@ -436,15 +435,15 @@ def play():
             next_move = agent.select_move(current_config)
             # logging.debug("Selected Move " + str(next_move))
             selected_move = next_move
-            # check if selected move is valid
             experiment.move_score = 0
             experiment.avalanche_per_move = 0
             move_validity = game_instance.input_tiles(next_move)
+            # check if selected move is valid
             if not move_validity:
                 print("Invalid move.")
             else:
                 experiment.exp_total_moves += 1
-                experiment.store_experiment_3_result(board_size, color_range_end, actual_num_colors_start, selected_move)
+                experiment.store_experiment_3_result(board_size, color_range_end, selected_move)
                 # logging.info(str(board_size) + "|" + str(color_range_end) + "|" + str(actual_num_colors_start) + "|" + str(experiment.total_user_move_count) + "|" + str(experiment.total_user_move_score) + "|" + str(experiment.total_avalanche_count) + "|" + str(experiment.total_avalanche_score) + "|" + str(experiment.exp_total_score) + "|" + str(selected_move) + "|" + str(experiment.move_score))
                 moves_to_end -= 1
 

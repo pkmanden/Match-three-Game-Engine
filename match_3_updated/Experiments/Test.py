@@ -5,15 +5,16 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 from scipy.stats import spearmanr
 
-df = pd.read_csv('exp_2_data_2.csv')
+df = pd.read_csv('exp_game_results_2.csv')
+data = df.groupby('Actual colors', as_index=False).mean()
 # sns.set(style="whitegrid")
 
 fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
 
-x = df['Actual colors']
-y = df['Max colors']
-z = df['Mean non-deterministic score']
+x = data['Actual colors']
+y = data['Max Colors']
+z = data['Mean non-deterministic score']
 
 plt.xlabel("Actual colors")
 plt.ylabel("Mean non-deterministic score")
@@ -34,7 +35,9 @@ print('Spearmans correlation: %.3f' % corr)
 
 # sns.relplot(x="Actual colors", y="Mean non-deterministic score", data=df)
 
-plt.show()
+# plt.show()
+plt.title("5 X 5 Grid")
+plt.savefig('plots_2/exp_2.jpg', format='jpeg', dpi=100, bbox_inches='tight')
 
 # ===============================================
 

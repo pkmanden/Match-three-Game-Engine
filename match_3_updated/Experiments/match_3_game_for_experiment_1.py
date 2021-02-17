@@ -160,7 +160,7 @@ class Game:
             logging.debug("Generated board is invalid. Regenerating board.")
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
                 logging.debug("Regenerating attempt " + str(count_reinit + 1))
-                self.game_grid = np.random.randint(self.color_start_range, self.color_end_range, size=grid_size)
+                self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
                 # self.game_grid = self.generate_random_board()
                 logging.debug("Generated board is \n" + str(self.game_grid))
                 count_reinit += 1
@@ -177,7 +177,7 @@ class Game:
                 return False
 
         logging.debug("Generated board is valid after " + str(count_reinit) + " attempts . Starting game")
-
+        # print(self.game_grid)
         # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Start")
         experiment.exp_total_game_starts += 1
         logging.debug("Cumulative regeneration count " + str(experiment.exp_total_num_regenerations) + "\n")
@@ -383,15 +383,14 @@ class Game:
         return self.error_status
 
 
-actual_num_colors_start = 0
+# actual_num_colors_start = 0
 
 def play():
     # initialize the game and create a game instance
     game_instance = Game()
     init_status = game_instance.init_board(board_size, color_range_end)
     if init_status:
-        global actual_num_colors_start
-        actual_num_colors_start = len(np.unique(game_instance.game_grid))
+        experiment.actual_num_colors_start = len(np.unique(game_instance.game_grid))
         moves_to_end = EXP_1_NUM_OF_MOVES_PER_GAME
         move_validity = False
         next_move = []
@@ -454,4 +453,4 @@ if __name__ == "__main__":
         #     logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
         #     play()
 
-        experiment.store_experiment_1_result(board_size, color_range_end, actual_num_colors_start)
+        experiment.store_experiment_1_result(board_size, color_range_end)

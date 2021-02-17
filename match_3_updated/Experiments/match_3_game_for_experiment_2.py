@@ -405,7 +405,7 @@ class Game:
         return self.error_status
 
 
-actual_num_colors_start = 0
+# actual_num_colors_start = 0
 
 
 def play():
@@ -414,8 +414,7 @@ def play():
     init_status = game_instance.init_board(board_size, color_range_end)
     if init_status:
         # ============== Change for experiment 2=============
-        global actual_num_colors_start
-        actual_num_colors_start = len(np.unique(game_instance.game_grid))
+        experiment.actual_num_colors_start = len(np.unique(game_instance.game_grid))
         # print("Actual colors start : ", len(np.unique(game_instance.game_grid)))
         # move = game_instance.get_all_possible_moves()[0]
         # print("Selected Move : ", move)
@@ -490,4 +489,4 @@ if __name__ == "__main__":
         # logging.info(str(board_size) + "|" + str(color_range_end) + "|" + str(actual_num_colors_start) + "|" + str(experiment.total_user_move_count) + "|" + str(experiment.total_user_move_score) + "|" + str(experiment.total_avalanche_count) + "|" + str(experiment.total_avalanche_score) + "|" + str(experiment.exp_total_score))
         # log_stages("Game", board_size, color_range_end, len(np.unique(game_instance.game_grid)), score=move_score)
 
-        experiment.store_experiment_2_result(board_size, color_range_end, actual_num_colors_start)
+        experiment.store_experiment_2_result(board_size, color_range_end)
