@@ -448,9 +448,9 @@ if __name__ == "__main__":
         agent = Agent()
 
         # play for number of times configured
-        Parallel(n_jobs=num_cores, require='sharedmem')(delayed(play)() for i in range(experiment_repeat))
-        # for i in range(experiment_repeat):
-        #     logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
-        #     play()
+        # Parallel(n_jobs=num_cores, require='sharedmem')(delayed(play)() for i in range(experiment_repeat))
+        for i in range(experiment_repeat):
+            # logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
+            play()
 
         experiment.store_experiment_1_result(board_size, color_range_end)

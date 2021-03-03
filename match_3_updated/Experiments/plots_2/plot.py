@@ -4,18 +4,18 @@ import pandas as pd
 
 # Take data from grid sizes
 dataframe = pd.read_csv("exp_game_results_1.csv")
-df1 = dataframe[dataframe['Grid Size'] == "(5, 5)"]
-df11 = df1.groupby('Actual Colors', as_index=False).mean()
-df2 = dataframe[dataframe['Grid Size'] == "(10, 10)"]
-df22 = df2.groupby('Actual Colors', as_index=False).mean()
-df3 = dataframe[dataframe['Grid Size'] == "(15, 15)"]
-df33 = df3.groupby('Actual Colors', as_index=False).mean()
-df4 = dataframe[dataframe['Grid Size'] == "(20, 20)"]
-df44 = df4.groupby('Actual Colors', as_index=False).mean()
+df11 = dataframe[dataframe['Grid Size'] == "(5, 5)"]
+# df11 = df1.groupby('Actual Colors', as_index=False).mean()
+df22 = dataframe[dataframe['Grid Size'] == "(10, 10)"]
+# df22 = df2.groupby('Actual Colors', as_index=False).mean()
+df33 = dataframe[dataframe['Grid Size'] == "(15, 15)"]
+# df33 = df3.groupby('Actual Colors', as_index=False).mean()
+df44 = dataframe[dataframe['Grid Size'] == "(20, 20)"]
+# df44 = df4.groupby('Actual Colors', as_index=False).mean()
 
 
 # ----------------------------Grid Size 5X5
-x = df11['Actual Colors']
+x = df11['Max Colors']
 
 y1 = df11['Avg No. of Regenerations until valid board generation']
 y2 = df11['Avg No. of Times Matches Occurred during init']
@@ -58,7 +58,7 @@ p3, = par2.plot(x, y3, label="Avg no. of deadlocks during init")
 host.set_yscale('symlog')
 par1.set_yscale('symlog')
 par2.set_yscale('symlog')
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of regenerations")
 par1.set_ylabel("Avg no. of times matches occurred during init")
 par2.set_ylabel("Avg no. of deadlocks during init")
@@ -69,8 +69,9 @@ host.axis["left"].label.set_color(p1.get_color())
 par1.axis["right"].label.set_color(p2.get_color())
 par2.axis["right2"].label.set_color(p3.get_color())
 
-# plt.show()
+
 plt.title("5 X 5 Grid")
+# plt.show()
 plt.savefig('5_5_1.jpg', format='jpeg', dpi=100, bbox_inches='tight')
 
 plt.clf()
@@ -97,7 +98,7 @@ p2, = par1.plot(x, y6, label="Avg score per game setting")
 p3, = par2.plot(x, y9, label="Avg no. of avalanche matches per game setting")
 
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg valid moves made")
 par1.set_ylabel("Avg score per game setting")
 par2.set_ylabel("Avg no. of avalanche matches")
@@ -118,7 +119,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y4, label="Avg no. of shuffles/deadlocks occurred per move")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of shuffles/deadlocks occurred")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -135,7 +136,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y8, label="Avg no. of possible/playable moves per configuration")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of possible/playable moves")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -152,7 +153,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y10, label="Probability that the game will start")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Probability that the game will start")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -165,7 +166,7 @@ plt.clf()
 
 
 # ----------------------------Grid Size 10X10
-x = df22['Actual Colors']
+x = df22['Max Colors']
 
 y1 = df22['Avg No. of Regenerations until valid board generation']
 y2 = df22['Avg No. of Times Matches Occurred during init']
@@ -207,7 +208,7 @@ p3, = par2.plot(x, y3, label="Avg no. of deadlocks during init")
 host.set_yscale('symlog')
 par1.set_yscale('symlog')
 par2.set_yscale('symlog')
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of regenerations")
 par1.set_ylabel("Avg no. of times matches occurred during init")
 par2.set_ylabel("Avg no. of deadlocks during init")
@@ -246,7 +247,7 @@ p2, = par1.plot(x, y6, label="Avg score per game setting")
 p3, = par2.plot(x, y9, label="Avg no. of avalanche matches per game setting")
 
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg valid moves made")
 par1.set_ylabel("Avg score per game setting")
 par2.set_ylabel("Avg no. of avalanche matches")
@@ -267,7 +268,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y4, label="Avg no. of shuffles/deadlocks occurred per move")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of shuffles/deadlocks occurred")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -284,7 +285,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y8, label="Avg no. of possible/playable moves per configuration")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of possible/playable moves")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -301,7 +302,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y10, label="Probability that the game will start")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Probability that the game will start")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -313,7 +314,7 @@ plt.savefig('10_10_5.jpg', format='jpeg', dpi=100, bbox_inches='tight')
 plt.clf()
 
 # ----------------------------Grid Size 15X15
-x = df33['Actual Colors']
+x = df33['Max Colors']
 
 y1 = df33['Avg No. of Regenerations until valid board generation']
 y2 = df33['Avg No. of Times Matches Occurred during init']
@@ -355,7 +356,7 @@ p3, = par2.plot(x, y3, label="Avg no. of deadlocks during init")
 host.set_yscale('symlog')
 par1.set_yscale('symlog')
 par2.set_yscale('symlog')
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of regenerations")
 par1.set_ylabel("Avg no. of times matches occurred during init")
 par2.set_ylabel("Avg no. of deadlocks during init")
@@ -394,7 +395,7 @@ p2, = par1.plot(x, y6, label="Avg score per game setting")
 p3, = par2.plot(x, y9, label="Avg no. of avalanche matches per game setting")
 
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg valid moves made")
 par1.set_ylabel("Avg score per game setting")
 par2.set_ylabel("Avg no. of avalanche matches")
@@ -415,7 +416,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y4, label="Avg no. of shuffles/deadlocks occurred per move")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of shuffles/deadlocks occurred")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -432,7 +433,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y8, label="Avg no. of possible/playable moves per configuration")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of possible/playable moves")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -449,7 +450,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y10, label="Probability that the game will start")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Probability that the game will start")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -461,7 +462,7 @@ plt.savefig('15_15_5.jpg', format='jpeg', dpi=100, bbox_inches='tight')
 plt.clf()
 
 # ----------------------------Grid Size 20X20
-x = df44['Actual Colors']
+x = df44['Max Colors']
 
 y1 = df44['Avg No. of Regenerations until valid board generation']
 y2 = df44['Avg No. of Times Matches Occurred during init']
@@ -503,7 +504,7 @@ p3, = par2.plot(x, y3, label="Avg no. of deadlocks during init")
 host.set_yscale('symlog')
 par1.set_yscale('symlog')
 par2.set_yscale('symlog')
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of regenerations")
 par1.set_ylabel("Avg no. of times matches occurred during init")
 par2.set_ylabel("Avg no. of deadlocks during init")
@@ -542,7 +543,7 @@ p2, = par1.plot(x, y6, label="Avg score per game setting")
 p3, = par2.plot(x, y9, label="Avg no. of avalanche matches per game setting")
 
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg valid moves made")
 par1.set_ylabel("Avg score per game setting")
 par2.set_ylabel("Avg no. of avalanche matches")
@@ -563,7 +564,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y4, label="Avg no. of shuffles/deadlocks occurred per move")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of shuffles/deadlocks occurred")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -580,7 +581,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y8, label="Avg no. of possible/playable moves per configuration")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Avg no. of possible/playable moves")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
@@ -597,7 +598,7 @@ host = HostAxes(fig, [0.15, 0.1, 0.65, 0.8])
 fig.add_axes(host)
 p1, = host.plot(x, y10, label="Probability that the game will start")
 
-host.set_xlabel("Actual number of colors")
+host.set_xlabel("Maximum number of colors")
 host.set_ylabel("Probability that the game will start")
 host.legend(loc="lower center", bbox_to_anchor=(0.5, -0.3), borderaxespad=0.)
 host.axis["left"].label.set_color(p1.get_color())
