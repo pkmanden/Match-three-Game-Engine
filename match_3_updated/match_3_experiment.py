@@ -9,6 +9,7 @@ from match_3_constants import *
 class Experiment:
 
     def __init__(self):
+        self.agent = ''
         self.exp_total_game_starts = 0 # total number of times game started
         self.exp_total_score = 0  # total score for a given setting across multiple plays
         self.exp_total_num_regenerations = 0  # count for getting total number of regenerations during init
@@ -20,6 +21,57 @@ class Experiment:
         self.exp_total_avalanche_match_count = 0  # count the number of avalanche matches occurred
         self.exp_init_invalid_match_three_count = 0  # count of total number of times matches occurred during board regeneration
         self.exp_init_deadlock = 0  # count of total number of times no possible moves found during board regeneration
+        self.total_user_move_count = 0
+        self.total_avalanche_count = 0
+        self.total_user_move_score = 0
+        self.total_avalanche_score = 0
+
+        self.first_move_user_count = 0
+        self.first_move_avalanche_count = 0
+        self.first_move_user_score = 0
+        self.first_move_avalanche_score = 0
+
+        self.total_first_move_user_count = 0
+        self.total_first_move_avalanche_count = 0
+        self.total_first_move_user_score = 0
+        self.total_first_move_avalanche_score = 0
+
+    # def reset_exp_2_metrics(self):
+        self.first_move_user_count = 0
+        self.first_move_avalanche_count = 0
+        self.first_move_user_score = 0
+        self.first_move_avalanche_score = 0
+
+        self.total_first_move_user_count = 0
+        self.total_first_move_avalanche_count = 0
+        self.total_first_move_user_score = 0
+        self.total_first_move_avalanche_score = 0
+
+    def store_exp_2_result(self, grid_size, number_of_colors):
+        file_exists = os.path.isfile("exp_2_results.csv")
+        with open('exp_2_results.csv', 'a+', newline='') as csv_file:
+            fieldnames = ['Grid Size',
+                          'Number of Colors',
+                          'Experiment Repeat',
+                          'Agent',
+                          'Total user move count after first move',
+                          'Total deterministic score after first move',
+                          'Total non-deterministic score after first move',
+                          'Total avalanche count after first move']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            if not file_exists:
+                print("File does not exist")
+                writer.writeheader()
+
+            writer.writerow({'Grid Size': grid_size,
+                             'Number of Colors': number_of_colors,
+                             'Experiment Repeat': EXP_SAME_BOARD_REPEAT,
+                             'Agent': self.agent,
+                             'Total user move count after first move': self.total_first_move_user_count,
+                             'Total deterministic score after first move': self.total_first_move_user_score,
+                             'Total non-deterministic score after first move': self.total_first_move_avalanche_score,
+                             'Total avalanche count after first move': self.total_first_move_avalanche_count})
+
 
     def store_experiment_result(self, grid_size, number_of_colors, experiment_repeats):
 
@@ -51,11 +103,9 @@ class Experiment:
         logging.info("Average possible moves per configuration: " + str(avg_possible_moves_per_config))
         logging.info("Average move per shuffle: " + str(avg_moves_per_shuffle))
 
-        print("Exp init")
-        file_exists = os.path.isfile("Experiments/exp_game_results_1.csv")
-        print(file_exists)
+        file_exists = os.path.isfile("exp_results.csv")
 
-        with open('Experiments/exp_game_results_1.csv', 'a+', newline='') as csv_file:
+        with open('exp_results.csv', 'a+', newline='') as csv_file:
             fieldnames = ['Grid Size',
                           'Number of Colors',
                           'Total No. of Regenerations until valid board generation',
@@ -63,13 +113,17 @@ class Experiment:
                           'Total No. of Deadlocks during init',
                           'Total No. of Times Game Started',
                           'Total No. of Shuffles/Deadlocks Occurred',
-                          'Average No. of Moves until Shuffle occurs per game setting',
                           'Total score per Game Setting',
                           'Total Valid Moves Made',
                           'Total No. of Possible/Playable Moves',
                           'Total No. of Avalanche Matches',
                           'Total Moves Available per Game Setting',
-                          'Experiment Repeat']
+                          'Experiment Repeat',
+                          'Agent',
+                          'Total user move count after first move',
+                          'Total deterministic score after first move',
+                          'Total non-deterministic score after first move',
+                          'Total avalanche count after first move']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
             if not file_exists:
                 print("File does not exist")
@@ -82,10 +136,14 @@ class Experiment:
                              'Total No. of Deadlocks during init': self.exp_init_deadlock,
                              'Total No. of Times Game Started': self.exp_total_game_starts,
                              'Total No. of Shuffles/Deadlocks Occurred': self.exp_total_num_shuffles,
-                             'Average No. of Moves until Shuffle occurs per game setting': avg_moves_per_shuffle,
                              'Total Valid Moves Made': self.exp_total_moves,
                              'Total score per Game Setting': self.exp_total_score,
                              'Total No. of Possible/Playable Moves': self.exp_total_possible_moves_count,
                              'Total No. of Avalanche Matches': self.exp_total_avalanche_match_count,
                              'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
-                             'Experiment Repeat': EXP_REPEAT})
+                             'Experiment Repeat': EXP_REPEAT,
+                             'Agent': self.agent,
+                             'Total user move count after first move': self.total_first_move_user_count,
+                             'Total deterministic score after first move': self.total_first_move_user_score,
+                             'Total non-deterministic score after first move': self.total_first_move_avalanche_score,
+                             'Total avalanche count after first move': self.total_first_move_avalanche_count})

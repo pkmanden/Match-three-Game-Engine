@@ -10,11 +10,7 @@ logging.basicConfig(filename='match3.log', level=logging.DEBUG)
 
 board_horizontal_matches = []
 board_vertical_matches = []
-game_mode = "nor"
-
-
-# def log_stages(stage, size, actual_num_colors, action, score=None, possible_moves=None):
-#     logging.info(str(stage) + "|" + str(size) + "|" + str(actual_num_colors) + "|" + str(action) + "|" + str(score) + "|" + str(possible_moves))
+game_mode = "normal"
 
 
 class Game:
@@ -144,12 +140,16 @@ class Game:
 
     # initialize the board with configured size and color ranges
     def init_board(self, grid_size, color_end_range):
+        # r = np.random.RandomState(1234)
         self.color_end_range = color_end_range
         self.grid_size = grid_size
         # generate a 2D array with values between color_start_range and color_end_range
         # value 0 is used later to show removed tiles and empty spaces on top of the grid
 
         # self.game_grid = self.generate_random_board()
+        # if not different_board:
+        #     self.game_grid = r.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
+        # else:
         self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
 
         logging.debug("Generated board is \n" + str(self.game_grid))
@@ -162,41 +162,42 @@ class Game:
             logging.debug("Generated board is invalid. Regenerating board.")
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
                 logging.debug("Regenerating attempt " + str(count_reinit + 1))
+                # if not different_board:
+                #     self.game_grid = r.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
+                # else:
                 self.game_grid = np.random.randint(self.color_start_range, self.color_end_range + 1, size=grid_size)
                 # self.game_grid = self.generate_random_board()
                 logging.debug("Generated board is \n" + str(self.game_grid))
                 count_reinit += 1
                 if game_mode == "exp":
-                    # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Regenerate")
                     experiment.exp_total_num_regenerations += 1
                     if self.check_matches(self.game_grid):
                         experiment.exp_init_invalid_match_three_count += 1
-                        # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Matches")
                     else:
                         experiment.exp_init_deadlock += 1
-                        # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Deadlock")
             else:
-                logging.debug("No valid board generated after " + str(NUM_OF_DEADLOCK_RETRIES) + " attempts. Setting skipped")
-                return False
+                logging.debug(
+                    "No valid board generated after " + str(NUM_OF_DEADLOCK_RETRIES) + " attempts. Setting skipped")
+                # return False
 
         logging.debug("Generated board is valid after " + str(count_reinit) + " attempts . Starting game")
-        logging.debug("Starting game with board size " + str(board_size) + " and " + str(len(np.unique(self.game_grid))) + " colors.")
+        logging.debug("Starting game with board size " + str(board_size) + " and " + str(
+            len(np.unique(self.game_grid))) + " colors.")
         print("Starting game with board size ", board_size, " and ", len(np.unique(self.game_grid)), " colors.")
         if game_mode == "exp":
-            # log_stages("Init", grid_size, len(np.unique(self.game_grid)), "Start")
             experiment.exp_total_game_starts += 1
             logging.debug("Cumulative regeneration count " + str(experiment.exp_total_num_regenerations) + "\n")
-        return True
+        # return True
 
     # get the current board configuration
     def get_current_board(self):
         return self.game_grid
 
-    # get the current board configuration
+    # get all the possible moves in the current board configuration
     def get_all_possible_moves(self):
         return self.possible_move_positions
 
-    # get the current board configuration
+    # move coordinates for swapping
     def input_tiles(self, move):
         (coord1, coord2) = move
         is_valid_move = self.validate_move(coord1, coord2)
@@ -215,7 +216,7 @@ class Game:
     def swap_tiles(self, coord1, coord2):
         # function for swapping the valid move and checking for the matches in
         # corresponding rows and columns
-
+        logging.debug("Board before swapping : \n" + str(self.game_grid))
         self.game_grid[coord1[0]][coord1[1]], self.game_grid[coord2[0]][coord2[1]] = self.game_grid[coord2[0]][
                                                                                          coord2[1]], \
                                                                                      self.game_grid[coord1[0]][
@@ -294,14 +295,14 @@ class Game:
                         break
                     else:
                         horizontal_chain.clear()
-        self.shift_tiles(horizontal_matches, vertical_matches)
+        self.shift_tiles(horizontal_matches, vertical_matches, param="UserMove")
 
     # function for shifting tiles above removed tiles
-    def shift_tiles(self, row_matches, column_matches):
+    def shift_tiles(self, row_matches, column_matches, param):
         return_error_flag = False
         matched_cells = {}
         total_matches = row_matches + column_matches
-        self.add_score(total_matches)
+        self.add_score(total_matches, param)
         if row_matches:
             for match in row_matches:
                 # self.add_score(match)
@@ -340,10 +341,9 @@ class Game:
     def distribute_new_tiles(self):
         new_arr = np.argwhere(self.game_grid == 0)
         for i in new_arr:
-            self.game_grid[i[0]][i[1]] = np.random.randint(self.color_start_range, self.color_end_range + 1)
+            self.game_grid[i[0]][i[1]] = random.randint(self.color_start_range, self.color_end_range)
         print("Score : ", self.score)
         logging.debug("New tiles added :\n" + str(self.game_grid))
-        # log_stages("Game", self.grid_size, len(np.unique(self.game_grid)), param, score=self.score)
 
         avalanche = self.get_matches(self.game_grid)
         if avalanche:
@@ -351,8 +351,8 @@ class Game:
                 experiment.exp_total_avalanche_match_count += 1
                 logging.debug("Avalanche detected. Cumulative avalanche count: " + str(
                     experiment.exp_total_avalanche_match_count))
-            print("Avalanche matches!")
-            self.shift_tiles(board_horizontal_matches, board_vertical_matches)
+            # print("Avalanche matches!")
+            self.shift_tiles(board_horizontal_matches, board_vertical_matches, param="Avalanche")
 
         else:
             count_reshuffle = 0
@@ -361,21 +361,30 @@ class Game:
                     self.game_grid = self.shuffle_board(self.game_grid)
                     count_reshuffle += 1
                     logging.debug("Deadlock detected. Attempting " + str(count_reshuffle) + "th shuffle")
-                    # log_stages("Game", self.grid_size, len(np.unique(self.game_grid)), "Deadlock", score=self.score)
                     # print("Deadlock detected. Attempting ", count_reshuffle, "th shuffle.")
                 else:
                     logging.error("No valid board after " + str(NUM_OF_DEADLOCK_RETRIES) + " shuffles.")
                     self.error_status = True
                     break
 
-    def add_score(self, removed_tiles):
-        logging.debug("Score for the match is " + str(len(removed_tiles)))
+    def add_score(self, removed_tiles, param):
         unique_tiles = []
         for tile in removed_tiles:
             unique_tiles += tile
         unique_tiles = set(unique_tiles)
         self.score += len(unique_tiles)
+        logging.debug("Score for the match is " + str(len(unique_tiles)))
         if game_mode == "exp":
+            if param == "UserMove":
+                experiment.total_user_move_count += 1
+                experiment.total_user_move_score += len(unique_tiles)
+                experiment.first_move_user_score = len(unique_tiles)
+                experiment.first_move_user_count = 1
+            if param == "Avalanche":
+                experiment.total_avalanche_count += 1
+                experiment.total_avalanche_score += len(unique_tiles)
+                experiment.first_move_avalanche_score = len(unique_tiles)
+                experiment.first_move_avalanche_count = 1
             experiment.exp_total_score += len(unique_tiles)
         # logging.debug("Game score: "+ str(self.score) + " and cumulative score: "+ str(experiment.exp_total_score))
 
@@ -392,49 +401,56 @@ class Game:
         return self.error_status
 
 
-def play():
+def play(starting_board):
     moves_to_end = NUM_OF_MOVES_PER_GAME
     move_validity = False
     next_move = []
+    current_config = []
 
     while moves_to_end > 0:
         logging.debug("\tMoves left:" + str(moves_to_end))
+        if moves_to_end == NUM_OF_MOVES_PER_GAME:
+            game_instance.game_grid = starting_board
         current_config = game_instance.get_current_board()
         logging.debug("Board Setting\n" + str(current_config))
 
         # get next move from the agent
-        agent.prepare_agent(game_instance.get_all_possible_moves())
+        # agent.prepare_agent(game_instance.get_all_possible_moves())
         next_move = agent.select_move(current_config)
         logging.debug("Selected Move " + str(next_move))
 
         # check if selected move is valid
         move_validity = game_instance.input_tiles(next_move)
+        if moves_to_end == NUM_OF_MOVES_PER_GAME:
+            experiment.total_first_move_user_score += experiment.first_move_user_score
+            experiment.total_first_move_avalanche_score += experiment.first_move_avalanche_score
+            experiment.total_first_move_avalanche_count += experiment.first_move_avalanche_count
+            experiment.total_first_move_user_count += experiment.first_move_user_count
         if not move_validity:
             print("Invalid move.")
         else:
-            if game_mode == "exp":
-                experiment.exp_total_moves += 1
+            experiment.exp_total_moves += 1
             moves_to_end -= 1
 
         if game_instance.get_error_status():
             moves_to_end = 0
 
-
 if __name__ == '__main__':
     arguments = len(sys.argv) - 1
-    if arguments < 1 or sys.argv[1] == "nor":
-        game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_REPEAT]]
-        game_mode = "nor"
+    # if arguments < 1 or sys.argv[1] == "normal":
+    game_mode = sys.argv[1]
+    if game_mode == "normal":
+        game_settings = [[NORMAL_BOARD_SIZE, NORMAL_COLOR_RANGE, NORMAL_AGENT, NORMAL_REPEAT]]
+        game_mode = "normal"
         logging.debug("Normal Mode Active")
     else:
-        game_mode = "exp"
         game_settings = []
         with open('exp_game_setting.csv', newline='') as settings_file:
             settings_reader = csv.reader(settings_file)
             next(settings_reader)
             for setting in settings_reader:
                 gs = setting[0].split(', ')
-                game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), EXP_REPEAT])
+                game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1]), setting[2], EXP_REPEAT])
 
         logging.debug("Experiment Mode Active")
 
@@ -443,20 +459,28 @@ if __name__ == '__main__':
             print("Experiment mode")
         experiment = Experiment()
         board_size = each_setting[0]
-        print("board_size : ", board_size)
         color_range_end = each_setting[1]
-        experiment_repeat = each_setting[2]
+        agent_name = each_setting[2]
+        experiment_repeat = each_setting[3]
         # initialize the agent to play the game
         logging.debug("Initializing.")
-        agent = Agent()
-        # play for number of times configured
-        for i in range(experiment_repeat):
-            if game_mode == "exp":
-                logging.debug("\tRepeating experiment " + str(i + 1) + " of " + str(experiment_repeat) + " times.")
-            # initialize the game and create a game instance
-            game_instance = Game()
-            init_status = game_instance.init_board(board_size, color_range_end)
-            if init_status:
-                play()
+        agent = Agent(agent_name)
+        experiment.agent = agent_name
+
+        # initialize the game and create a game instance
+        game_instance = Game()
+
+        # if init_status:
         if game_mode == "exp":
+            # Parallel(n_jobs=num_cores, require='sharedmem')(delayed(exp_start)() for i in range(EXP_DIFF_BOARD_REPEAT))
+            for i in range(EXP_DIFF_BOARD_REPEAT):
+                game_instance.init_board(board_size, color_range_end)
+                board = game_instance.get_current_board()
+                same_board = board.copy()
+                for j in range(EXP_SAME_BOARD_REPEAT):
+                    play(same_board)
             experiment.store_experiment_result(board_size, color_range_end, experiment_repeat)
+        else:
+            game_instance.init_board(board_size, color_range_end)
+            board = game_instance.get_current_board()
+            play(board)
