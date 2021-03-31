@@ -3,21 +3,16 @@ import random
 
 class Agent:
     moves = []
-    game_board = []
     agent = ''
     board_config = []
 
     def __init__(self, agent_name):
         self.agent = agent_name
 
-    # current_solution = []
-
-    # def prepare_agent(self, solution):
-    #     self.current_solution = solution
-    def select_move(self, config):
+    def select_move(self, config, possible_moves):
         self.board_config = config
         available_moves = []
-        possible_moves = self.find_possible_moves(config)
+        # possible_moves = self.find_possible_moves(config)
         row_moves = self.find_row_moves(possible_moves)
         if not row_moves:
             available_moves = possible_moves
@@ -48,7 +43,7 @@ class Agent:
         for i in range(len(config) - 1):
             for j in range(len(config[0])):
                 board_copy = config.copy()
-                board_copy[i][j], board_copy[i + 1][j] = board_copy[i + 1][j], board_copy[i][j]
+                board_copy[i, j], board_copy[i + 1, j] = board_copy[i + 1, j], board_copy[i, j]
                 match = self.check_matches(board_copy)
                 if match:
                     co_ords.append([(i, j), (i + 1, j)])
@@ -57,7 +52,7 @@ class Agent:
         for i in range(len(config)):
             for j in range(len(config[0]) - 1):
                 board_copy = config.copy()
-                board_copy[i][j], board_copy[i][j + 1] = board_copy[i][j + 1], board_copy[i][j]
+                board_copy[i, j], board_copy[i, j + 1] = board_copy[i, j + 1], board_copy[i, j]
                 match = self.check_matches(board_copy)
                 if match:
                     co_ords.append([(i, j), (i, j + 1)])
@@ -69,7 +64,7 @@ class Agent:
         for j in range(len(board[0])):
             count = 1
             for i in range(len(board) - 1):
-                if board[i][j] == board[i + 1][j]:
+                if board[i, j] == board[i + 1, j]:
                     count += 1
                 else:
                     count = 1
@@ -80,7 +75,7 @@ class Agent:
         for i in range(len(board)):
             count = 1
             for j in range(len(board[0]) - 1):
-                if board[i][j] == board[i][j + 1]:
+                if board[i, j] == board[i, j + 1]:
                     count += 1
                 else:
                     count = 1

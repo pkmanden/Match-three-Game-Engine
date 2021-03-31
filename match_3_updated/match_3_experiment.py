@@ -36,7 +36,17 @@ class Experiment:
         self.total_first_move_user_score = 0
         self.total_first_move_avalanche_score = 0
 
-    # def reset_exp_2_metrics(self):
+    def reset_agent_metrics(self):
+        self.exp_total_score = 0  # total score for a given setting across multiple plays
+        self.exp_total_num_shuffles = 0  # count for getting total number of shuffles
+        self.exp_total_moves = 0  # count for getting average number of moves per shuffle
+        self.exp_total_possible_moves_count = 0  # count of total number of possible moves
+        self.exp_total_avalanche_match_count = 0  # count the number of avalanche matches occurred
+        self.total_user_move_count = 0
+        self.total_avalanche_count = 0
+        self.total_user_move_score = 0
+        self.total_avalanche_score = 0
+
         self.first_move_user_count = 0
         self.first_move_avalanche_count = 0
         self.first_move_user_score = 0
@@ -46,6 +56,7 @@ class Experiment:
         self.total_first_move_avalanche_count = 0
         self.total_first_move_user_score = 0
         self.total_first_move_avalanche_score = 0
+
 
     def store_exp_2_result(self, grid_size, number_of_colors):
         file_exists = os.path.isfile("exp_2_results.csv")
