@@ -6,8 +6,8 @@ import m3_game
 import numpy as np
 
 BOARD_NDIM = 2
-BOARD_SIZE = (5, 5)
-COLOR_END = 6
+BOARD_SIZE = (10, 10)
+COLOR_END = 10
 
 
 class MatchThreeEnv(gym.Env):
@@ -61,14 +61,17 @@ class MatchThreeEnv(gym.Env):
             shape=BOARD_SIZE,
             dtype=np.int)
 
+    def __get_action(self, index):
+        return self.game_actions[index]
+
     def step(self, action):
-        self.game.input_tiles(self.game_actions[action])
+        self.game.input_tiles(self.__get_action(action))
         if self.game.game_stats.stat_gameplay_status == "Invalid":
             reward = 0
         else:
-            reward = self.game.get_score()
+            reward = self.game.get_move_score()
         # change counter even action wasn't successful
-        print(f'reward : {reward}')
+        # print(f'reward : {reward}')
         self.episode_counter += 1
         if self.episode_counter >= self.rollout_len:
             done = True
@@ -81,6 +84,7 @@ class MatchThreeEnv(gym.Env):
 
     def reset(self):
         self.game.init_board()
+        self.game.game_stats.stat_game_score = 0
         observation = self.game.get_board()
         return observation  # reward, done, info can't be included
 

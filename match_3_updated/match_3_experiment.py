@@ -21,10 +21,10 @@ class Experiment:
         self.exp_total_avalanche_match_count = 0  # count the number of avalanche matches occurred
         self.exp_init_invalid_match_three_count = 0  # count of total number of times matches occurred during board regeneration
         self.exp_init_deadlock = 0  # count of total number of times no possible moves found during board regeneration
-        self.total_user_move_count = 0
-        self.total_avalanche_count = 0
-        self.total_user_move_score = 0
-        self.total_avalanche_score = 0
+        # self.total_user_move_count = 0
+        # self.total_avalanche_count = 0
+        # self.total_user_move_score = 0
+        # self.total_avalanche_score = 0
 
         self.first_move_user_count = 0
         self.first_move_avalanche_count = 0
@@ -35,6 +35,12 @@ class Experiment:
         self.total_first_move_avalanche_count = 0
         self.total_first_move_user_score = 0
         self.total_first_move_avalanche_score = 0
+
+        # self.score_per_agent = 0
+        # self.shuffles_per_agent = 0
+        # self.moves_made_per_agent = 0
+        # self.possible_moves_per_agent = 0
+        # self.avalanche_per_agent = 0
 
     def reset_agent_metrics(self):
         self.exp_total_score = 0  # total score for a given setting across multiple plays
@@ -42,10 +48,10 @@ class Experiment:
         self.exp_total_moves = 0  # count for getting average number of moves per shuffle
         self.exp_total_possible_moves_count = 0  # count of total number of possible moves
         self.exp_total_avalanche_match_count = 0  # count the number of avalanche matches occurred
-        self.total_user_move_count = 0
-        self.total_avalanche_count = 0
-        self.total_user_move_score = 0
-        self.total_avalanche_score = 0
+        # self.total_user_move_count = 0
+        # self.total_avalanche_count = 0
+        # self.total_user_move_score = 0
+        # self.total_avalanche_score = 0
 
         self.first_move_user_count = 0
         self.first_move_avalanche_count = 0
@@ -56,7 +62,6 @@ class Experiment:
         self.total_first_move_avalanche_count = 0
         self.total_first_move_user_score = 0
         self.total_first_move_avalanche_score = 0
-
 
     def store_exp_2_result(self, grid_size, number_of_colors):
         file_exists = os.path.isfile("exp_2_results.csv")
@@ -83,36 +88,35 @@ class Experiment:
                              'Total non-deterministic score after first move': self.total_first_move_avalanche_score,
                              'Total avalanche count after first move': self.total_first_move_avalanche_count})
 
-
     def store_experiment_result(self, grid_size, number_of_colors, experiment_repeats):
 
-        logging.info("Cumulative game score is: " + str(self.exp_total_score))
-        logging.info("Cumulative regeneration is: " + str(self.exp_total_num_regenerations))
-        logging.info("Cumulative no of shuffles is: " + str(self.exp_total_num_shuffles))
-        logging.info("Cumulative no of valid moves made is: " + str(self.exp_total_moves))
-        logging.info("Cumulative no of possible moves: " + str(self.exp_total_possible_moves_count) + "\n")
+        # logging.info("Cumulative game score is: " + str(self.exp_total_score))
+        # logging.info("Cumulative regeneration is: " + str(self.exp_total_num_regenerations))
+        # logging.info("Cumulative no of shuffles is: " + str(self.exp_total_num_shuffles))
+        # logging.info("Cumulative no of valid moves made is: " + str(self.exp_total_moves))
+        # logging.info("Cumulative no of possible moves: " + str(self.exp_total_possible_moves_count) + "\n")
+        #
+        # if self.exp_total_moves == 0:
+        #     score_per_move = 0
+        #     avg_possible_moves_per_config = math.inf
+        # else:
+        #     score_per_move = self.exp_total_score / self.exp_total_moves
+        #     avg_possible_moves_per_config = self.exp_total_possible_moves_count / self.exp_total_moves
+        #
+        # if self.exp_total_num_shuffles == 0:
+        #     avg_moves_per_shuffle = math.inf
+        # else:
+        #     avg_moves_per_shuffle = self.exp_total_moves / self.exp_total_num_shuffles
 
-        if self.exp_total_moves == 0:
-            score_per_move = 0
-            avg_possible_moves_per_config = math.inf
-        else:
-            score_per_move = self.exp_total_score / self.exp_total_moves
-            avg_possible_moves_per_config = self.exp_total_possible_moves_count / self.exp_total_moves
-
-        if self.exp_total_num_shuffles == 0:
-            avg_moves_per_shuffle = math.inf
-        else:
-            avg_moves_per_shuffle = self.exp_total_moves / self.exp_total_num_shuffles
-
-        average_regeneration_for_init = self.exp_total_num_regenerations / experiment_repeats
-        average_deadlock_count_per_setting = self.exp_total_num_shuffles / experiment_repeats
-        avg_avalanche_count_per_setting = self.exp_total_avalanche_match_count / experiment_repeats
-
-        logging.info("Average game score is: " + str(score_per_move))
-        logging.info("Average regeneration for init: " + str(average_regeneration_for_init))
-        logging.info("Average no deadlocks: " + str(average_deadlock_count_per_setting))
-        logging.info("Average possible moves per configuration: " + str(avg_possible_moves_per_config))
-        logging.info("Average move per shuffle: " + str(avg_moves_per_shuffle))
+        # average_regeneration_for_init = self.exp_total_num_regenerations / experiment_repeats
+        # average_deadlock_count_per_setting = self.exp_total_num_shuffles / experiment_repeats
+        # avg_avalanche_count_per_setting = self.exp_total_avalanche_match_count / experiment_repeats
+        #
+        # logging.info("Average game score is: " + str(score_per_move))
+        # logging.info("Average regeneration for init: " + str(average_regeneration_for_init))
+        # logging.info("Average no deadlocks: " + str(average_deadlock_count_per_setting))
+        # logging.info("Average possible moves per configuration: " + str(avg_possible_moves_per_config))
+        # logging.info("Average move per shuffle: " + str(avg_moves_per_shuffle))
 
         file_exists = os.path.isfile("exp_results.csv")
 

@@ -4,6 +4,7 @@ import os
 from m3_game import *
 import pprint
 
+
 class ExpStatus:
     def __init__(self, agent_type):
         self.agent_type = agent_type
@@ -14,9 +15,9 @@ class ExpStatus:
         current_key = (gamestats.grid_size, gamestats.color_end)
 
         if current_key in self.consolidated_result.keys():
-            self.consolidated_result[current_key]['stat_init_matched_count'] += gamestats.stat_init_matched_count
-            self.consolidated_result[current_key]['stat_init_deadlock_count'] += gamestats.stat_init_deadlock_count
-            self.consolidated_result[current_key]['stat_init_regen_count'] += gamestats.stat_init_regen_count
+            self.consolidated_result[current_key]['stat_init_matched_count'] = gamestats.stat_init_matched_count
+            self.consolidated_result[current_key]['stat_init_deadlock_count'] = gamestats.stat_init_deadlock_count
+            self.consolidated_result[current_key]['stat_init_regen_count'] = gamestats.stat_init_regen_count
             self.consolidated_result[current_key]['stat_firstmove_nondetscore'] += gamestats.stat_firstmove_nondetscore
             self.consolidated_result[current_key]['stat_firstmove_detscore'] += gamestats.stat_firstmove_detscore
             self.consolidated_result[current_key]['stat_firstmove_avalanche_count'] += gamestats.stat_firstmove_avalanche_count
@@ -47,11 +48,9 @@ class ExpStatus:
 
     #For a given grid size, over 20 moves, over 50 games with same board, repeated 200 times
 
-
     def pretty_print(self):
         print(f'Agent type {self.agent_type}')
         pprint.pprint(self.consolidated_result)
-
 
     def write_csv(self):
         file_exists = os.path.isfile("exp_results.csv")
@@ -70,9 +69,7 @@ class ExpStatus:
                           'Total Moves Available per Game Setting',
                           'Total deterministic score after first move',
                           'Total non-deterministic score after first move',
-                          'Total avalanche count after first move',
-                          'Init Time',
-                          'Move Time']
+                          'Total avalanche count after first move']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
             if not file_exists:
@@ -95,7 +92,10 @@ class ExpStatus:
                  'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
                  'Total deterministic score after first move': self.consolidated_result[key]['stat_firstmove_detscore'],
                  'Total non-deterministic score after first move': self.consolidated_result[key]['stat_firstmove_nondetscore'],
-                 'Total avalanche count after first move': self.consolidated_result[key]['stat_firstmove_avalanche_count'],
-                 'Init Time': self.consolidated_result[key]['stat_game_init_time'],
-                 'Move Time': self.consolidated_result[key]['stat_game_move_time']
+                 'Total avalanche count after first move': self.consolidated_result[key]['stat_firstmove_avalanche_count']
                                  })
+
+    def reinit_exp(self):
+        self.consolidated_result = {}
+
+

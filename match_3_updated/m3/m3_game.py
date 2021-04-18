@@ -1,3 +1,6 @@
+import csv
+import os
+
 from m3_globals import *
 import numpy as np
 import collections
@@ -33,6 +36,7 @@ class GameStats:
 
         self.stat_valid_moves_made = 0
         self.stat_game_score = 0
+        self.stat_move_score = 0
         self.stat_total_deadlock_count = 0
         self.stat_total_avalanche_count = 0
         self.stat_total_possible_moves = 0
@@ -57,6 +61,49 @@ class GameStats:
         print(f'GameInitTime: {self.stat_game_init_time}')
         print(f'GameMoveTime: {self.stat_game_move_time}')
 
+    def write_csv(self, agent):
+        file_exists = os.path.isfile("exp_results.csv")
+        with open('exp_results.csv', 'a+', newline='') as csv_file:
+            fieldnames = ['Agent',
+                          'Grid Size',
+                          'Number of Colors',
+                          'Total No. of Regenerations until valid board generation',
+                          'Total No. of Times Matches Occurred during init',
+                          'Total No. of Deadlocks during init',
+                          'Total No. of Shuffles/Deadlocks Occurred',
+                          'Total score per Game Setting',
+                          'Total Valid Moves Made',
+                          'Total No. of Possible/Playable Moves',
+                          'Total No. of Avalanche Matches',
+                          'Total Moves Available per Game Setting',
+                          'Total deterministic score after first move',
+                          'Total non-deterministic score after first move',
+                          'Total avalanche count after first move']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+            if not file_exists:
+                print("File does not exist")
+                writer.writeheader()
+
+
+            writer.writerow({
+                    'Agent': agent,
+                    'Grid Size': self.grid_size,
+                    'Number of Colors': self.color_end,
+                    'Total No. of Regenerations until valid board generation': self.stat_init_regen_count,
+                    'Total No. of Times Matches Occurred during init': self.stat_init_matched_count,
+                    'Total No. of Deadlocks during init': self.stat_init_deadlock_count,
+                    'Total No. of Shuffles/Deadlocks Occurred': self.stat_total_deadlock_count,
+                    'Total Valid Moves Made': self.stat_valid_moves_made,
+                    'Total score per Game Setting': self.stat_game_score,
+                    'Total No. of Possible/Playable Moves': self.stat_total_possible_moves,
+                    'Total No. of Avalanche Matches': self.stat_total_avalanche_count,
+                    'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
+                    'Total deterministic score after first move': self.stat_firstmove_detscore,
+                    'Total non-deterministic score after first move': self.stat_firstmove_nondetscore,
+                    'Total avalanche count after first move': self.stat_firstmove_avalanche_count
+                })
+
 
 class Game:
     board_horizontal_matches = []
@@ -69,6 +116,7 @@ class Game:
         self.grid_size = grid_size
         self.possible_move_positions = []
         self.first_move_flag = True
+        # self.game_grid = np.random.randint(self.color_start, self.color_end + 1, size=self.grid_size)
 
     def init_board(self):
 
@@ -84,6 +132,7 @@ class Game:
 
         while self.__check_matches(self.game_grid) or not self.find_moves():
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
+                print("Reiniting board")
                 self.game_grid = np.random.randint(self.color_start, self.color_end + 1, size=self.grid_size)
                 count_reinit += 1
 
@@ -96,7 +145,6 @@ class Game:
 
             else:
                 return self.game_stats
-
 
         self.game_stats.stat_gameplay_status = "Start"
         print("Starting game with board size ", self.grid_size, " and ", self.color_end, " colors.")
@@ -124,6 +172,9 @@ class Game:
 
     def get_score(self):
         return self.game_stats.stat_game_score
+
+    def get_move_score(self):
+        return self.game_stats.stat_move_score
 
     def __swap(self):
         pass
@@ -308,6 +359,10 @@ class Game:
         unique_tiles = set(unique_tiles)
         self.game_stats.stat_game_score += len(unique_tiles)
         # logging.debug("Score for the match is " + str(len(unique_tiles)))
+        if param == "UserMove":
+            self.game_stats.stat_move_score = len(unique_tiles)
+        if param == "Avalanche":
+            self.game_stats.stat_move_score += len(unique_tiles)
 
         if self.first_move_flag:
             if param == "UserMove":

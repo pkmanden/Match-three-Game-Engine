@@ -18,9 +18,9 @@ if __name__ == "__main__":
     a4 = Agent("human")
     # a5 = Agent("dqn")
 
-
     # Adding only the required agents to the list
-    agents.append(a3)
+    agents.append(a1)
+    agents.append(a2)
 
     # Create a statistics instance for each agent and one for cases where agent is not relevant
     for agent in agents:
@@ -45,7 +45,7 @@ if __name__ == "__main__":
             # Consolidate result if game cannot be started with the setting
             if game.init_board().stat_gameplay_status == "NoStart":
                 exp_stats["NotApplicable"].consolidate_result(game.get_stats())
-                print("Expermient cancelled.")
+                print("Experiment cancelled.")
                 break
 
             # Fix board if the game can be started
@@ -78,11 +78,15 @@ if __name__ == "__main__":
                             moves_to_end = 0
                         elif gamestats.stat_gameplay_status == "Valid":
                             moves_to_end -= 1
-                        #gamestats.print_stats()
+                    # gamestats.write_csv(agent.get_type())
                     exp_stats[agent.get_type()].consolidate_result(gamestats)
-
                 games_to_end -= 1
             exp_to_end -= 1
 
-    for experiment_agent in exp_stats:
-        exp_stats[experiment_agent].write_csv()
+            for experiment_agent in exp_stats:
+                exp_stats[experiment_agent].write_csv()
+                exp_stats[experiment_agent].reinit_exp()
+
+
+
+
