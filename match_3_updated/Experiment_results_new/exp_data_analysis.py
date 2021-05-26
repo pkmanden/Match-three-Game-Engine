@@ -6,7 +6,7 @@ import pandas as pd
 df = pd.read_csv('exp_results.csv')
 # grid_sizes = ['(5, 5)', '(7, 7)', '(10, 10)', '(15, 15)', '(20, 20)']
 # input_data = pd.read_csv('../m3/exp_game_setting.csv')
-max_colors = df['Number of Colors'].unique().tolist()
+max_colors = sorted(df['Number of Colors'].unique().tolist())
 grid_sizes = df['Grid Size'].unique().tolist()
 agents = ["top_agent", "bottom_agent", "NotApplicable"]
 
@@ -24,8 +24,10 @@ for agent in agents:
                 data_regen_match_median = data_1['Total No. of Times Matches Occurred during init'].median()
                 data_regen_deadlock_mean = data_1['Total No. of Deadlocks during init'].mean()
                 data_regen_deadlock_median = data_1['Total No. of Deadlocks during init'].median()
-                data_deadlock_mean = data_1['Avg No. of Shuffles/Deadlocks Occurred per move'].mean()
-                data_deadlock_median = data_1['Avg No. of Shuffles/Deadlocks Occurred per move'].median()
+                data_deadlock_per_move_mean = data_1['Avg No. of Shuffles/Deadlocks Occurred per move'].mean()
+                data_deadlock_per_move_median = data_1['Avg No. of Shuffles/Deadlocks Occurred per move'].median()
+                data_deadlock_per_game_mean = data_1['Avg No. of Shuffles/Deadlocks Occurred per game'].mean()
+                data_deadlock_per_game_median = data_1['Avg No. of Shuffles/Deadlocks Occurred per game'].median()
                 data_score_mean = data_1['Avg score per Game Setting'].mean()
                 data_score_median = data_1['Avg score per Game Setting'].median()
                 data_valid_moves_mean = data_1['Avg Valid Moves Made'].mean()
@@ -55,6 +57,8 @@ for agent in agents:
                                   'Median Deadlocks during init',
                                   'Mean Shuffles/Deadlocks Occurred per move',
                                   'Median Shuffles/Deadlocks Occurred per move',
+                                  'Mean Shuffles/Deadlocks Occurred per game',
+                                  'Median Shuffles/Deadlocks Occurred per game',
                                   'Mean score per Game Setting',
                                   'Median score per Game Setting',
                                   'Mean Valid Moves Made',
@@ -83,8 +87,10 @@ for agent in agents:
                         'Median Matches Occurred during init': data_regen_match_median,
                         'Mean Deadlocks during init': data_regen_deadlock_mean,
                         'Median Deadlocks during init': data_regen_deadlock_median,
-                        'Mean Shuffles/Deadlocks Occurred per move': data_deadlock_mean,
-                        'Median Shuffles/Deadlocks Occurred per move': data_deadlock_median,
+                        'Mean Shuffles/Deadlocks Occurred per move': data_deadlock_per_move_mean,
+                        'Median Shuffles/Deadlocks Occurred per move': data_deadlock_per_move_median,
+                        'Mean Shuffles/Deadlocks Occurred per game': data_deadlock_per_game_mean,
+                        'Median Shuffles/Deadlocks Occurred per game': data_deadlock_per_game_median,
                         'Mean score per Game Setting': data_score_mean,
                         'Median score per Game Setting': data_score_median,
                         'Mean Valid Moves Made': data_valid_moves_mean,

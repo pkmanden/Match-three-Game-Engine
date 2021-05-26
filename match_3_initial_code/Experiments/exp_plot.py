@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-dataframe = pd.read_csv("Experiments/match_3_experiments_final.csv")
+dataframe = pd.read_csv("Experiments_old/match_3_experiments_final.csv")
 df1 = dataframe[dataframe['Grid Size'] == "(5, 5)"]
 df2 = dataframe[dataframe['Grid Size'] == "(7, 7)"]
 df3 = dataframe[dataframe['Grid Size'] == "(10, 10)"]
@@ -34,7 +34,7 @@ plt.legend(["Grid Size (5, 5)", "Grid Size (7, 7)", "Grid Size (10, 10)", "Grid 
 # plt.title('')
 plt.xlabel('Number of Colors')
 plt.ylabel('Average Number of Moves until Shuffle occurs')
-plt.savefig('Experiments/plot1.png')
+plt.savefig('Experiments_old/plot1.png')
 
 plt.clf()
 
@@ -52,7 +52,7 @@ plt.plot(x5, y5)
 plt.legend(["Grid Size (5, 5)", "Grid Size (7, 7)", "Grid Size (10, 10)", "Grid Size (15, 15)", "Grid Size (20, 20)"])
 plt.xlabel('Number of Colors')
 plt.ylabel('Average Number of Times Deadlock Occurred')
-plt.savefig('Experiments/plot2.png')
+plt.savefig('Experiments_old/plot2.png')
 
 plt.clf()
 
@@ -69,7 +69,7 @@ plt.plot(x5, y5)
 plt.legend(["Grid Size (5, 5)", "Grid Size (7, 7)", "Grid Size (10, 10)", "Grid Size (15, 15)", "Grid Size (20, 20)"])
 plt.xlabel('Number of Colors')
 plt.ylabel('Average Score per Move')
-plt.savefig('Experiments/plot3.png')
+plt.savefig('Experiments_old/plot3.png')
 
 plt.clf()
 
@@ -86,7 +86,7 @@ plt.plot(x5, y5)
 plt.legend(["Grid Size (5, 5)", "Grid Size (7, 7)", "Grid Size (10, 10)", "Grid Size (15, 15)", "Grid Size (20, 20)"])
 plt.xlabel('Number of Colors')
 plt.ylabel('Average Number of Possible Moves per Configuration')
-plt.savefig('Experiments/plot4.png')
+plt.savefig('Experiments_old/plot4.png')
 
 plt.clf()
 
@@ -103,4 +103,4 @@ plt.plot(x5, y5)
 plt.legend(["Grid Size (5, 5)", "Grid Size (7, 7)", "Grid Size (10, 10)", "Grid Size (15, 15)", "Grid Size (20, 20)"])
 plt.xlabel('Number of Colors')
 plt.ylabel('Average Number of Avalanche matches occurred')
-plt.savefig('Experiments/plot5.png')
+plt.savefig('Experiments_old/plot5.png')
