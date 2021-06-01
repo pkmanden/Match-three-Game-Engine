@@ -29,10 +29,10 @@ env = ActionMasker(env, mask_fn)  # Wrap to enable masking
 # a new action_mask_fn kwarg, as it did in an earlier draft.
 model = MaskablePPO(MaskableActorCriticPolicy, env, verbose=1)
 start_time = time.time()
-model.learn(total_timesteps=500000)
+model.learn(total_timesteps=1000000)
 end_time = time.time()
 # save model
-model.save("ppo_m3_10X10_15")
+model.save("ppo_m3_5X5")
 print(f'Trained for {end_time-start_time} seconds')
 
 # Note that use of masks is manual and optional outside of learning,

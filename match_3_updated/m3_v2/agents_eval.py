@@ -27,8 +27,8 @@ for agent in agents:
                 # print(data_regen_mean)
                 # filename = "%s.csv" % agent
                 # data_regen_mean.to_csv(filename, index=False)
-                file_exists = os.path.isfile("agents_eval_total_score_reward.csv")
-                with open('agents_eval_total_score_reward.csv', 'a+', newline='') as csv_file:
+                file_exists = os.path.isfile("agents_eval.csv")
+                with open('agents_eval.csv', 'a+', newline='') as csv_file:
                     fieldnames = ['Agent',
                                   'Grid Size',
                                   'Number of Colors',

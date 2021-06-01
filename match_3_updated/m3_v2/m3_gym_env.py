@@ -6,9 +6,6 @@ import m3_game
 from m3_globals import *
 import numpy as np
 
-BOARD_SIZE = (10, 10)
-COLOR_END = 15
-
 
 class MatchThreeEnv(gym.Env):
     # Custom Environment that follows gym interface
@@ -103,7 +100,7 @@ class MatchThreeEnv(gym.Env):
         self.game.init_board()  # comment this
         # -------------------------
         # ---change to be made for playing with trained agent
-        # self.game.game_grid = SAME_BOARD_10X10_10.copy() #uncomment this
+        # self.game.game_grid = SAME_BOARD_10X10_15.copy() #uncomment this
         # -------------------------
         self.game.find_moves()
         self.game.game_stats.stat_game_score = 0

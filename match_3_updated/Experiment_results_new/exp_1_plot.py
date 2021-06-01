@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
@@ -50,7 +51,7 @@ for grid_size in grid_sizes:
         plt.title(title)
         filename = "%sX%s_regen_init" % (row, col)
         # plt.savefig(path+filename)
-        plt.show()
+        # plt.show()
         plt.clf()
         y4 = df1['Mean Shuffles/Deadlocks Occurred per move']
         plt.plot(x, y4)
@@ -59,7 +60,7 @@ for grid_size in grid_sizes:
         plt.title(title)
         filename = "%sX%s_mean_deadlock_%s" % (row, col, agent)
         # plt.savefig(path+filename)
-        plt.show()
+        # plt.show()
         plt.clf()
         y5 = df1['Mean Shuffles/Deadlocks Occurred per game']
         plt.plot(x, y5)
@@ -68,7 +69,7 @@ for grid_size in grid_sizes:
         plt.title(title)
         filename = "%sX%s_mean_shuffle_per_game_%s" % (row, col, agent)
         # plt.savefig(path+filename)
-        plt.show()
+        # plt.show()
         plt.clf()
         y6 = df1['Mean Possible/Playable Moves per config']
         plt.plot(x, y6)
@@ -77,7 +78,20 @@ for grid_size in grid_sizes:
         plt.title(title)
         filename = "%sX%s_mean_possible_moves_%s" % (row, col, agent)
         # plt.savefig(path+filename)
-        plt.show()
+        # plt.show()
+        plt.clf()
+        y7 = df1['Mean Avalanche Matches per game']
+        plt.plot(x, y7)
+        if grid_size == '(20, 20)':
+            print('20X20 grid avalanche')
+            plt.yticks(np.arange(0, 2, 0.30))
+
+        plt.legend(['Avalanche Matches per game'])
+        title = "%sX%s Grid played by %s" % (row, col, agent)
+        plt.title(title)
+        filename = "%sX%s_mean_avalanche_%s" % (row, col, agent)
+        # plt.savefig(path+filename)
+        # plt.show()
         plt.clf()
         # filename = "%s.csv" % agent
         # title = "%sX%s Grid played by %s" % (row, col, agent)

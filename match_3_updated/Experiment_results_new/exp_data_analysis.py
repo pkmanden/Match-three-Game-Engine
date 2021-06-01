@@ -34,8 +34,8 @@ for agent in agents:
                 data_valid_moves_median = data_1['Avg Valid Moves Made'].median()
                 data_possible_moves_mean = data_1['Avg No. of Possible/Playable Moves per config'].mean()
                 data_possible_moves_median = data_1['Avg No. of Possible/Playable Moves per config'].median()
-                data_avalanche_mean = data_1['Avg No. of Avalanche Matches per move'].mean()
-                data_avalanche_median = data_1['Avg No. of Avalanche Matches per move'].median()
+                data_avalanche_mean = data_1['Avg No. of Avalanche Matches per game'].mean()
+                data_avalanche_median = data_1['Avg No. of Avalanche Matches per game'].median()
                 data_det_score_mean = data_1['Avg deterministic score after first move'].mean()
                 data_det_score_median = data_1['Avg deterministic score after first move'].median()
                 data_nondet_score_mean = data_1['Avg non-deterministic score after first move'].mean()
@@ -65,8 +65,8 @@ for agent in agents:
                                   'Median Valid Moves Made',
                                   'Mean Possible/Playable Moves per config',
                                   'Median Possible/Playable Moves per config',
-                                  'Mean Avalanche Matches per move',
-                                  'Median Avalanche Matches per move',
+                                  'Mean Avalanche Matches per game',
+                                  'Median Avalanche Matches per game',
                                   'Mean deterministic score after first move',
                                   'Median deterministic score after first move',
                                   'Mean non-deterministic score after first move',
@@ -97,8 +97,8 @@ for agent in agents:
                         'Median Valid Moves Made': data_valid_moves_median,
                         'Mean Possible/Playable Moves per config': data_possible_moves_mean,
                         'Median Possible/Playable Moves per config': data_possible_moves_median,
-                        'Mean Avalanche Matches per move': data_avalanche_mean,
-                        'Median Avalanche Matches per move': data_avalanche_median,
+                        'Mean Avalanche Matches per game': data_avalanche_mean,
+                        'Median Avalanche Matches per game': data_avalanche_median,
                         'Mean deterministic score after first move': data_det_score_mean,
                         'Median deterministic score after first move': data_det_score_median,
                         'Mean non-deterministic score after first move': data_nondet_score_mean,

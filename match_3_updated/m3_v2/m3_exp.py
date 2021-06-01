@@ -110,7 +110,7 @@ class ExpStatus:
                     'Agent': self.agent_type,
                     'Grid Size': key[0],
                     'Number of Colors': key[1],
-                    'Total score per Game Setting': self.consolidated_result[key]['stat_game_score']
+                    'Total score per Game Setting': self.consolidated_result[key]['stat_game_score']/EXP_SAME_BOARD_REPEAT
                 })
 
 

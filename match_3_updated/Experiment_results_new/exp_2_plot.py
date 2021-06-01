@@ -13,19 +13,33 @@ agents = ["top_agent", "bottom_agent"]
 
 
 for grid_size in grid_sizes:
+    labels = []
     # grid_size = '(' + size + ')'
     (row, col) = grid_size.split(',')[0].replace("(", ""), grid_size.split(",")[1].replace(" ", "").replace(")", "")
-    # for max_color in max_colors:
-    df1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent")]
-    x = df1['Number of Colors']
-    y = df1['Mean non-deterministic score after first move']
-    plt.xlabel('Number of Colors')
-    plt.ylabel('Mean non-deterministic score')
-    plt.plot(x, y)
+    for agent in agents:
+        df1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == agent)]
+
+        if grid_size == '(5, 5)':
+            df1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == agent) & (df['Number of Colors'] >= 5) & (df['Number of Colors'] <= 10)]
+        if grid_size == '(10, 10)':
+            df1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == agent) & (df['Number of Colors'] >= 10) & (df['Number of Colors'] <= 20)]
+        if grid_size == '(15, 15)':
+            df1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == agent) & (df['Number of Colors'] >= 10) & (df['Number of Colors'] <= 40)]
+        if grid_size == '(20, 20)':
+            df1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == agent) & (df['Number of Colors'] >= 15) & (df['Number of Colors'] <= 50)]
+
+        x = df1['Number of Colors']
+        y = df1['Mean non-deterministic score after first move']
+        plt.xlabel('Number of Colors')
+        plt.ylabel('Mean non-deterministic score')
+        plt.plot(x, y)
+        labels.append(agent)
+        plt.legend(labels)
     filename = "%sX%s_mean_nondet_score" % (row, col)
     title = "%sX%s Grid" % (row, col)
     plt.title(title)
     plt.savefig(path+filename)
+    # plt.show()
     plt.clf()
 
 
