@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 
-df = pd.read_csv('exp_results_compare_agents_10X10_10.csv')
+df = pd.read_csv('exp_results_compare_agents.csv')
 # grid_sizes = ['(5, 5)', '(7, 7)', '(10, 10)', '(15, 15)', '(20, 20)']
 # input_data = pd.read_csv('../m3/exp_game_setting.csv')
 max_colors = df['Number of Colors'].unique().tolist()

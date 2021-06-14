@@ -44,8 +44,8 @@ for agent in agents:
                 # print(data_regen_mean)
                 # filename = "%s.csv" % agent
                 # data_regen_mean.to_csv(filename, index=False)
-                file_exists = os.path.isfile("exp_mean_median_results.csv")
-                with open('exp_mean_median_results.csv', 'a+', newline='') as csv_file:
+                file_exists = os.path.isfile("exp_mean_median_results_1.csv")
+                with open('exp_mean_median_results_1.csv', 'a+', newline='') as csv_file:
                     fieldnames = ['Agent',
                                   'Grid Size',
                                   'Number of Colors',

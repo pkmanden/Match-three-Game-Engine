@@ -1,10 +1,10 @@
+import collections
 import csv
 import os
+import random
+from time import process_time
 
 from m3_globals import *
-import numpy as np
-import collections
-import random
 
 
 class GameStats:
@@ -137,6 +137,7 @@ class Game:
         # 1. no existing matches are present in the board
         # 2. at least one valid move is possible
 
+        start_time = process_time()
         count_reinit = 0
         while self.__check_matches(self.game_grid) or not self.find_moves():
             if count_reinit < NUM_OF_DEADLOCK_RETRIES:
@@ -152,6 +153,9 @@ class Game:
             else:
                 return self.game_stats
 
+        end_time = process_time()
+        elapsed = end_time-start_time
+        print(f'Time for {count_reinit} regens : {elapsed} seconds')
         self.game_stats.stat_gameplay_status = "Start"
         print("Starting game with board size ", self.grid_size, " and ", self.color_end, " colors.")
         print(self.game_grid)
@@ -339,6 +343,7 @@ class Game:
             self.__shift_tiles(board_horizontal_matches, board_vertical_matches, param="Avalanche")
 
         else:
+            st_time = process_time()
             count_reshuffle = 0
             while not self.find_moves():
                 if count_reshuffle < NUM_OF_DEADLOCK_RETRIES:
@@ -347,6 +352,8 @@ class Game:
                 else:
                     self.game_stats.stat_gameplay_status = "Error"
                     break
+            en_time = process_time()
+            print(f'Time for {count_reshuffle} shuffles : {en_time-st_time} seconds')
 
     def __add_score(self, removed_tiles, param):
         unique_tiles = []

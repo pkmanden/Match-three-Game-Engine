@@ -9,37 +9,35 @@ from sb3_contrib.ppo_mask import MaskablePPO
 import m3_gym_env
 from m3_globals import *
 from m3_gym_env import BOARD_SIZE, COLOR_END
+from gameplay_heatmap import GameplayHeatmap
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
 def mask_fn(env: gym.Env) -> np.ndarray:
-    # Do whatever you'd like in this function to return the action mask
-    # for the current env. In this example, we assume the env has a
-    # helpful method we can rely on.
+    # env has a helpful method we can rely on.
     return env.get_action_mask()
 
 rollout_len = NUM_OF_MOVES_PER_GAME
 env = m3_gym_env.MatchThreeEnv(rollout_len)
 env = ActionMasker(env, mask_fn)
-model = MaskablePPO.load("ppo_m3_5X5.zip", use_masking=True)
+model = MaskablePPO.load("ppo_m3_5X5_tunin.zip", use_masking=True)
 
 
-# diff_board = EXP_DIFF_BOARD_REPEAT
 boards = np.load('starting_boards.npz')
-# while diff_board > 0:
 env.reset()
+edges_gh = GameplayHeatmap()
 for i in range(len(boards)):
     ind = 'arr_%s'% i
     board = boards[ind]
     repeat = EXP_SAME_BOARD_REPEAT
     while repeat > 0:
-        # total_score = 0
         obs = board
         moves_to_end = NUM_OF_MOVES_PER_GAME
-        print(f'Starting board :\n {obs}')
         while moves_to_end > 0:
-            action, _states = model.predict(obs, action_masks=env.get_action_mask(), deterministic=True)
+            env.render()
+            action, _states = model.predict(obs, action_masks=env.get_action_mask())
             obs, reward, done, info = env.step(action)
+            edges_gh.add_move_to_graph(env.game_actions[action], "rl_agent")
             # total_score += env.game.get_move_score()
             if done:
                 print('Done trajectory')
@@ -65,4 +63,4 @@ for i in range(len(boards)):
                 break
             moves_to_end -= 1
         repeat -= 1
-    # diff_board -= 1
+edges_gh.draw_map("rl_agent")

@@ -1,9 +1,7 @@
-from numpy import save
-
+from gameplay_heatmap import GameplayHeatmap
 from m3_agent import *
 from m3_exp import *
 from m3_globals import *
-
 
 if __name__ == "__main__":
 
@@ -23,6 +21,8 @@ if __name__ == "__main__":
     agents.append(a2)
     agents.append(a3)
 
+    edges_gh = GameplayHeatmap()
+
     # Create a statistics instance for each agent and one for cases where agent is not relevant
     for agent in agents:
         exp_stats[agent.get_type()] = ExpStatus(agent.get_type())
@@ -38,17 +38,9 @@ if __name__ == "__main__":
             break
         # Fix board if the game can be started
         fix_init_board = game.get_board()
-        print(f'finx init board : \n {fix_init_board}')
         arrays_list.append(fix_init_board)
         np.savez('starting_boards.npz', *arrays_list[:EXP_DIFF_BOARD_REPEAT])
-        # save('starting_boards.npy', fix_init_board)
         fix_possible_moves = game.move_helper()
-        # game.game_grid = SAME_BOARD_10X10_15
-        # possible_moves = game.find_moves()
-
-        # Fix board
-        # fix_init_board = game.get_board()
-        # fix_possible_moves = possible_moves
 
         games_to_end = EXP_SAME_BOARD_REPEAT
         while games_to_end > 0:
@@ -62,6 +54,7 @@ if __name__ == "__main__":
                     agent.find_row_moves(possible_moves)
                     move = agent.select_move(game.game_grid)
                     game.input_tiles(move)
+                    edges_gh.add_move_to_graph(move, agent.get_type())
                     gamestats = game.get_stats()
                     if gamestats.stat_gameplay_status == "Invalid":
                         pass
@@ -71,13 +64,9 @@ if __name__ == "__main__":
                         moves_to_end -= 1
                 exp_stats[agent.get_type()].consolidate_result(gamestats)
             games_to_end -= 1
+            for experiment_agent in exp_stats:
+                exp_stats[experiment_agent].write_csv_compare_agents()
+                exp_stats[experiment_agent].reinit_exp()
         exp_to_end -= 1
-        for experiment_agent in exp_stats:
-            exp_stats[experiment_agent].write_csv_compare_agents()
-            exp_stats[experiment_agent].reinit_exp()
-
-
-
-
-
-
+    for ag in agents:
+        edges_gh.draw_map(ag.get_type())

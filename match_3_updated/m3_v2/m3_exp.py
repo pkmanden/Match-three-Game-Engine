@@ -50,8 +50,8 @@ class ExpStatus:
         pprint.pprint(self.consolidated_result)
 
     def write_csv(self):
-        file_exists = os.path.isfile("exp_results_all_agents.csv")
-        with open('exp_results_all_agents.csv', 'a+', newline='') as csv_file:
+        file_exists = os.path.isfile("exp_results.csv")
+        with open('exp_results.csv', 'a+', newline='') as csv_file:
             fieldnames = ['Agent',
                           'Grid Size',
                           'Number of Colors',
@@ -110,7 +110,7 @@ class ExpStatus:
                     'Agent': self.agent_type,
                     'Grid Size': key[0],
                     'Number of Colors': key[1],
-                    'Total score per Game Setting': self.consolidated_result[key]['stat_game_score']/EXP_SAME_BOARD_REPEAT
+                    'Total score per Game Setting': self.consolidated_result[key]['stat_game_score']
                 })
 
 
