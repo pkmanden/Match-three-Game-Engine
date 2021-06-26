@@ -22,16 +22,16 @@ env = ActionMasker(env, mask_fn)  # Wrap to enable masking
 # with ActionMasker. If the wrapper is detected, the masks are automatically
 # retrieved and used when learning.
 model_params = {
-    "n_steps": 64,
-    "batch_size": 512,
-    "gamma": 0.9,
-    "learning_rate": 0.011773450851746286,
-    "ent_coef": 0.04463754165386159,
-    "clip_range": 0.2,
-    "n_epochs": 1,
-    "gae_lambda": 0.98,
+    "n_steps": 512,
+    "batch_size": 256,
+    "gamma": 0.9999,
+    "learning_rate": 9.780496175531937e-05,
+    "ent_coef": 5.994868211837647e-08,
+    "n_epochs": 20,
+    "gae_lambda": 0.95,
     "max_grad_norm": 0.3,
-    "vf_coef": 0.14049009488531852,
+    "vf_coef": 0.4415183431344316,
+    "clip_range": 0.3
 }
 model = MaskablePPO(MaskableActorCriticPolicy, env, verbose=1,tensorboard_log="./ppo_m3_tensorboard/", **model_params)
 start_time = time.time()
