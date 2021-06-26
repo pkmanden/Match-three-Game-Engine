@@ -69,14 +69,6 @@ class MatchThreeEnv(gym.Env):
             mask[i] = 1
         return mask
 
-    # def __get_reward(self):
-    # reward function for a greedy agent
-    #     if self.game.game_stats.stat_gameplay_status == "Invalid":
-    #         reward = 0
-    #     else:
-    #         reward = self.game.get_move_score()
-    #     return reward
-
     def get_score(self):
         return self.game.get_score()
 
@@ -96,12 +88,7 @@ class MatchThreeEnv(gym.Env):
         return observation, reward, done, {}
 
     def reset(self):
-        # ---change to be made for training
-        self.game.init_board()  # comment this
-        # -------------------------
-        # ---change to be made for playing with trained agent
-        # self.game.game_grid = SAME_BOARD_10X10_15.copy() #uncomment this
-        # -------------------------
+        self.game.init_board()
         self.game.find_moves()
         self.game.game_stats.stat_game_score = 0
         self.possible_actions = self.game.move_helper()

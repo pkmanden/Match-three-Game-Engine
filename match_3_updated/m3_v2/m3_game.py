@@ -3,8 +3,8 @@ import csv
 import os
 import random
 from time import process_time
-
 from m3_globals import *
+import numpy as np
 
 
 class GameStats:
@@ -22,16 +22,15 @@ class GameStats:
         self.stat_firstmove_nondetscore = 0
         self.stat_firstmove_detscore = 0
         self.stat_firstmove_avalanche_count = 0
-
         self.stat_valid_moves_made = 0
         self.stat_game_score = 0
         self.stat_move_score = 0
         self.stat_total_deadlock_count = 0
         self.stat_total_avalanche_count = 0
+        self.stat_total_avalanche_score = 0
         self.stat_total_possible_moves = 0
         self.stat_game_move_time = 0
         self.stat_game_init_time = 0
-
         self.stat_gameplay_status= "NoStart"
 
     def print_stats(self):
@@ -45,6 +44,7 @@ class GameStats:
         print(f'GameScore: {self.stat_game_score}')
         print(f'DeadlockCount: {self.stat_total_deadlock_count}')
         print(f'AvalancheCount: {self.stat_total_avalanche_count}')
+        print(f'TotalAvalancheScore: {self.stat_total_avalanche_score}')
         print(f'TotalPossibleMoves: {self.stat_total_possible_moves}')
         print(f'LastMoveStatus: {self.stat_gameplay_status}')
         print(f'GameInitTime: {self.stat_game_init_time}')
@@ -64,6 +64,7 @@ class GameStats:
                           'Total Valid Moves Made',
                           'Total No. of Possible/Playable Moves',
                           'Total No. of Avalanche Matches',
+                          'Total Avalanche Score',
                           'Total Moves Available per Game Setting',
                           'Total deterministic score after first move',
                           'Total non-deterministic score after first move',
@@ -86,6 +87,7 @@ class GameStats:
                     'Total score per Game Setting': self.stat_game_score,
                     'Total No. of Possible/Playable Moves': self.stat_total_possible_moves,
                     'Total No. of Avalanche Matches': self.stat_total_avalanche_count,
+                    'Total Avalanche Score': self.stat_total_avalanche_score,
                     'Total Moves Available per Game Setting': NUM_OF_MOVES_PER_GAME,
                     'Total deterministic score after first move': self.stat_firstmove_detscore,
                     'Total non-deterministic score after first move': self.stat_firstmove_nondetscore,
@@ -98,7 +100,9 @@ class GameStats:
             fieldnames = ['Agent',
                           'Grid Size',
                           'Number of Colors',
-                          'Total score per Game Setting']
+                          'Total score per Game',
+                          'Total No. of Avalanche Matches per game',
+                          'Total Avalanche Score per game',]
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
             if not file_exists:
@@ -109,7 +113,9 @@ class GameStats:
                 'Agent': agent,
                 'Grid Size': self.grid_size,
                 'Number of Colors': self.color_end,
-                'Total score per Game Setting': self.stat_game_score
+                'Total score per Game': self.stat_game_score,
+                'Total No. of Avalanche Matches per game': self.stat_total_avalanche_count,
+                'Total Avalanche Score per game': self.stat_total_avalanche_score
             })
 
 
@@ -118,7 +124,7 @@ class Game:
     board_vertical_matches = []
 
     def __init__(self, grid_size, color_end):
-        self.game_stats=GameStats(grid_size, color_end)
+        self.game_stats = GameStats(grid_size, color_end)
         self.color_start = 1
         self.color_end = color_end
         self.grid_size = grid_size
@@ -147,12 +153,9 @@ class Game:
                     self.game_stats.stat_init_matched_count += 1
                 else:
                     self.game_stats.stat_init_deadlock_count += 1
-
                 self.game_stats.stat_init_regen_count += 1
-
             else:
                 return self.game_stats
-
         end_time = process_time()
         elapsed = end_time-start_time
         print(f'Time for {count_reinit} regens : {elapsed} seconds')
@@ -212,12 +215,11 @@ class Game:
     def __swap_tiles(self, coord1, coord2):
         # function for swapping the valid move and checking for the matches in
         # corresponding rows and columns
-
         self.game_grid[coord1[0]][coord1[1]], self.game_grid[coord2[0]][coord2[1]] = self.game_grid[coord2[0]][
                                                                                          coord2[1]], \
                                                                                      self.game_grid[coord1[0]][
                                                                                          coord1[1]]
-        print(f'Board after swapping the tiles:\n {self.game_grid}')
+        print(f'Board after swapping the tiles:\n{self.game_grid}')
         horizontal_matches = []
         vertical_matches = []
         if coord1[1] == coord2[1]:  # if vertical swap is performed
@@ -276,7 +278,7 @@ class Game:
                             vertical_chain.clear()
 
             horizontal_chain = []
-            for j in range(len(self.game_grid[0]) - 1):  # check the 1 row
+            for j in range(len(self.game_grid[0]) - 1):  # check the 1 line
                 chain_continue_flag = False
                 if self.game_grid[coord1[0]][j] == self.game_grid[coord1[0]][j + 1]:
                     if (coord1[0], j) not in horizontal_chain:
@@ -316,7 +318,7 @@ class Game:
                             matched_cells[row].append(col)
                     else:
                         matched_cells[row] = [col]
-        print(f'Matched tiles removed\n {self.game_grid}')
+        print(f'Matched tiles removed\n{self.game_grid}')
         matched_cells = collections.OrderedDict(sorted(matched_cells.items()))
 
         for matched_cell in matched_cells:
@@ -327,7 +329,7 @@ class Game:
                     else:
                         self.game_grid[i][cell] = self.game_grid[i - 1][cell]
 
-        print(f'Tiles above removed tiles moved down\n {self.game_grid}')
+        print(f'Tiles above removed tiles moved down\n{self.game_grid}')
         self.__distribute_new_tiles()
 
     def __distribute_new_tiles(self):
@@ -336,12 +338,11 @@ class Game:
         for i in new_arr:
             self.game_grid[i[0]][i[1]] = random.randint(self.color_start, self.color_end)
         print("Score : ", self.game_stats.stat_game_score)
-        print(f'New tiles added :\n {self.game_grid}')
+        print(f'New tiles added :\n{self.game_grid}')
         avalanche = self.get_matches(self.game_grid)
         if avalanche:
-            self.game_stats.stat_total_avalanche_count += 1
+            self.game_stats.stat_total_avalanche_count += len(board_horizontal_matches) + len(board_vertical_matches)
             self.__shift_tiles(board_horizontal_matches, board_vertical_matches, param="Avalanche")
-
         else:
             st_time = process_time()
             count_reshuffle = 0
@@ -365,7 +366,7 @@ class Game:
             self.game_stats.stat_move_score = len(unique_tiles)
         if param == "Avalanche":
             self.game_stats.stat_move_score += len(unique_tiles)
-
+            self.game_stats.stat_total_avalanche_score += len(unique_tiles)
         if self.first_move_flag:
             if param == "UserMove":
                 self.game_stats.stat_firstmove_detscore += len(unique_tiles)
@@ -406,7 +407,6 @@ class Game:
 
     def find_moves(self):
         # function for returning possible moves in the current board
-
         co_ords = []
         # vertical swap and check for matches
         for i in range(len(self.game_grid) - 1):
@@ -432,11 +432,9 @@ class Game:
 
     def get_matches(self, board):
         # function for checking all the matches in the board
-
         global board_horizontal_matches
         global board_vertical_matches
         match_found_flag = False
-
         board_horizontal_matches = []
         for i in range(len(board)):
             horizontal_chain = []
@@ -476,5 +474,4 @@ class Game:
                         break
                     else:
                         vertical_chain.clear()
-
         return match_found_flag

@@ -5,18 +5,15 @@ from itertools import product
 import numpy as np
 
 from m3_globals import *
-import matplotlib.pyplot as plt
-import seaborn as sb
+
 
 class GameplayHeatmap:
-
     def points_generator(self):
-        # iterates over points on the board
+        # iterates over cells on the board
         (rows, cols) = BOARD_SIZE
         points = [(i, j) for i, j in product(range(rows), range(cols))]
         for point in points:
             yield point
-
 
     def __init__(self):
         actions = list()
@@ -34,14 +31,18 @@ class GameplayHeatmap:
 
         action_num = [i for i in range(len(actions))]
         self.action_dict = dict(zip(action_num, actions))
+
+        self.edge_freq_top_agent = np.zeros(BOARD_SIZE)
         self.edge_freq_random_agent = np.zeros(BOARD_SIZE)
         self.edge_freq_bottom_agent = np.zeros(BOARD_SIZE)
         self.edge_freq_rl_agent = np.zeros(BOARD_SIZE)
         # return action_dict
 
-
     def add_move_to_graph(self, move, agent):
         (coord1, coord2) = move
+        if agent == "top_agent":
+            self.edge_freq_top_agent[coord1] += 1
+            self.edge_freq_top_agent[coord2] += 1
         if agent == "random_agent":
             self.edge_freq_random_agent[coord1] += 1
             self.edge_freq_random_agent[coord2] += 1
@@ -53,21 +54,16 @@ class GameplayHeatmap:
             self.edge_freq_rl_agent[coord2] += 1
 
     def draw_map(self, agent):
-        heat_map = None
         heat_array = None
+        if agent == "top_agent":
+            heat_array = self.edge_freq_top_agent
         if agent == "random_agent":
-            heat_map = sb.heatmap(self.edge_freq_random_agent, cmap="Reds")
             heat_array = self.edge_freq_random_agent
         if agent == "bottom_agent":
-            heat_map = sb.heatmap(self.edge_freq_bottom_agent, cmap="Reds")
             heat_array = self.edge_freq_bottom_agent
         if agent == "rl_agent":
-            heat_map = sb.heatmap(self.edge_freq_rl_agent, cmap="Reds")
             heat_array = self.edge_freq_rl_agent
 
-        heat_map.xaxis.tick_top()
-        filename = '%s_heatmap' % agent
-        plt.savefig(filename)
         file_exists = os.path.isfile("heatmap.csv")
         with open('heatmap.csv', 'a+', newline='') as csv_file:
             fieldnames = ['Agent',
@@ -86,4 +82,3 @@ class GameplayHeatmap:
                 'Number of Colors': COLOR_END,
                 'Game Grid': heat_array
             })
-        plt.show()

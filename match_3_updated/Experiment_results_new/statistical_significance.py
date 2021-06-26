@@ -1,20 +1,10 @@
 # Mann-Whitney U test
 import csv
 import os
-
 import pandas as pd
-from numpy.random import seed
-from numpy.random import randn
-from scipy.stats import mannwhitneyu, wilcoxon
+from scipy.stats import mannwhitneyu
 
-# seed the random number generator
-# seed(1)
-# generate two independent samples
-# data1 = 5 * randn(100) + 50
-# data2 = 5 * randn(100) + 51
 df = pd.read_csv('exp_results.csv', usecols=["Grid Size", "Number of Colors", "Agent", "Avg score per Game Setting"])
-
-
 max_colors = df['Number of Colors'].unique().tolist()
 grid_sizes = ['(5, 5)', '(10, 10)', '(15, 15)', '(20, 20)']
 agents = ["top_agent", "bottom_agent"]
@@ -27,17 +17,17 @@ for grid_size in grid_sizes:
         data_2 = df[(df['Grid Size'] == grid_size) & (df['Number of Colors'] == color) & (df['Agent'] == "bottom_agent")]
 
         if grid_size == '(5, 5)':
-            data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 5) & (df['Number of Colors'] <= 10)]
-            data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 5) & (df['Number of Colors'] <= 10)]
+            data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 5) & (df['Number of Colors'] <= 8)]
+            data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 5) & (df['Number of Colors'] <= 8)]
         if grid_size == '(10, 10)':
             data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 10) & (df['Number of Colors'] <= 20)]
             data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 10) & (df['Number of Colors'] <= 20)]
         if grid_size == '(15, 15)':
-            data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 10) & (df['Number of Colors'] <= 40)]
-            data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 10) & (df['Number of Colors'] <= 40)]
+            data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 15) & (df['Number of Colors'] <= 30)]
+            data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 15) & (df['Number of Colors'] <= 30)]
         if grid_size == '(20, 20)':
-            data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 15) & (df['Number of Colors'] <= 50)]
-            data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 15) & (df['Number of Colors'] <= 50)]
+            data_1 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "top_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 20) & (df['Number of Colors'] <= 50)]
+            data_2 = df[(df['Grid Size'] == grid_size) & (df['Agent'] == "bottom_agent") & (df['Number of Colors'] == color) & (df['Number of Colors'] >= 20) & (df['Number of Colors'] <= 50)]
 
         if not data_1.empty and not data_2.empty:
             data1 = data_1['Avg score per Game Setting'].copy()
@@ -45,12 +35,18 @@ for grid_size in grid_sizes:
             # -----------------------Mann-Whitney U Test-------------------
             # compare samples
             stat, p = mannwhitneyu(data1, data2)
-            file_exists = os.path.isfile("p-values.csv")
-            with open('p-values.csv', 'a+', newline='') as csv_file:
+            file_exists = os.path.isfile("stat_significance.csv")
+            with open('stat_significance.csv', 'a+', newline='') as csv_file:
                 fieldnames = ['Grid Size',
                               'Number of Colors',
                               'statistics',
-                              'p-value']
+                              'p-value',
+                              'Top agent Mean score',
+                              'Top agent Median score',
+                              'Top agent Std',
+                              'Bottom agent Mean score',
+                              'Bottom agent Median score',
+                              'Bottom agent Std']
                 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
                 if not file_exists:
@@ -60,11 +56,17 @@ for grid_size in grid_sizes:
                 writer.writerow({
                     'Grid Size': grid_size,
                     'Number of Colors': color,
-                    'statistics': '%.3f' %stat,
-                    'p-value': '%.3f' % p
+                    'statistics': '%f' %stat,
+                    'p-value': '%f' % p,
+                    'Top agent Mean score': round(data_1['Avg score per Game Setting'].mean(), 2),
+                    'Top agent Median score': round(data_1['Avg score per Game Setting'].median(), 2),
+                    'Top agent Std': round(data_1['Avg score per Game Setting'].std(), 2),
+                    'Bottom agent Mean score': round(data_2['Avg score per Game Setting'].mean(), 2),
+                    'Bottom agent Median score': round(data_2['Avg score per Game Setting'].median(), 2),
+                    'Bottom agent Std': round(data_2['Avg score per Game Setting'].std(), 2)
                 })
 
-            print('Statistics=%.3f, p=%.3f' % (stat, p))
+            print('Statistics=%f, p=%f' % (stat, p))
             # interpret
             alpha = 0.05
             if p > alpha:

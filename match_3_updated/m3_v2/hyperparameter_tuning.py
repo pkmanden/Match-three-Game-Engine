@@ -1,8 +1,4 @@
-# hide all deprecation warnings from tensorflow
 import tensorflow as tf
-from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
-
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 import os
 import optuna
 import gym
@@ -12,6 +8,9 @@ from sb3_contrib.common.wrappers import ActionMasker
 from sb3_contrib.ppo_mask import MaskablePPO
 from stable_baselines3.common.evaluation import evaluate_policy
 from m3_gym_env import MatchThreeEnv
+from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
+
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
@@ -22,7 +21,6 @@ def optimize_ppo(trial):
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
     learning_rate = trial.suggest_loguniform("lr", 1e-5, 1)
-    # Uncomment to enable learning rate schedule
     lr_schedule = trial.suggest_categorical('lr_schedule', ['linear', 'constant'])
     ent_coef = trial.suggest_loguniform("ent_coef", 0.00000001, 0.1)
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])
@@ -38,8 +36,6 @@ def optimize_ppo(trial):
     if batch_size > n_steps:
         batch_size = n_steps
 
-    # Independent networks usually work best
-    # when not working with images
     net_arch = {
         "small": [dict(pi=[64, 64], vf=[64, 64])],
         "medium": [dict(pi=[256, 256], vf=[256, 256])],

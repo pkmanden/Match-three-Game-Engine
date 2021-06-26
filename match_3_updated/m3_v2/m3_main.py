@@ -14,9 +14,9 @@ if __name__ == "__main__":
     a4 = Agent("human")
 
     # Adding only the required agents to the list
-    agents.append(a1)
+    # agents.append(a1)
     # agents.append(a2)
-    # agents.append(a3)
+    agents.append(a3)
 
     # Create a statistics instance for each agent and one for cases where agent is not relevant
     for agent in agents:
@@ -32,12 +32,9 @@ if __name__ == "__main__":
             game_settings.append([(int(gs[0]), int(gs[1])), int(setting[1])])
 
     for each_settings in game_settings:
-
         exp_to_end = EXP_DIFF_BOARD_REPEAT
         while exp_to_end > 0:
-
             game = Game(each_settings[0], each_settings[1])
-
             # Consolidate result if game cannot be started with the setting
             if game.init_board().stat_gameplay_status == "NoStart":
                 exp_stats["NotApplicable"].consolidate_result(game.get_stats())

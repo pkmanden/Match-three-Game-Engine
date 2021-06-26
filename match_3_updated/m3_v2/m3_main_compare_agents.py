@@ -1,3 +1,4 @@
+import numpy as np
 from gameplay_heatmap import GameplayHeatmap
 from m3_agent import *
 from m3_exp import *
@@ -17,7 +18,7 @@ if __name__ == "__main__":
     # a5 = Agent("rl_agent")
 
     # Adding only the required agents to the list
-    # agents.append(a1)
+    agents.append(a1)
     agents.append(a2)
     agents.append(a3)
 
@@ -30,7 +31,6 @@ if __name__ == "__main__":
     exp_to_end = EXP_DIFF_BOARD_REPEAT
     while exp_to_end > 0:
         game = Game(BOARD_SIZE, COLOR_END)
-
         # Consolidate result if game cannot be started with the setting
         if game.init_board().stat_gameplay_status == "NoStart":
             exp_stats["NotApplicable"].consolidate_result(game.get_stats())
@@ -41,7 +41,6 @@ if __name__ == "__main__":
         arrays_list.append(fix_init_board)
         np.savez('starting_boards.npz', *arrays_list[:EXP_DIFF_BOARD_REPEAT])
         fix_possible_moves = game.move_helper()
-
         games_to_end = EXP_SAME_BOARD_REPEAT
         while games_to_end > 0:
             for agent in agents:

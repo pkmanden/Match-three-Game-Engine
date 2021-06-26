@@ -8,7 +8,6 @@ class ExpStatus:
         self.consolidated_result = {}
 
     def consolidate_result(self, gamestats):
-
         current_key = (gamestats.grid_size, gamestats.color_end)
 
         if current_key in self.consolidated_result.keys():
@@ -22,6 +21,7 @@ class ExpStatus:
             self.consolidated_result[current_key]['stat_game_score'] += gamestats.stat_game_score
             self.consolidated_result[current_key]['stat_total_deadlock_count'] += gamestats.stat_total_deadlock_count
             self.consolidated_result[current_key]['stat_total_avalanche_count'] += gamestats.stat_total_avalanche_count
+            self.consolidated_result[current_key]['stat_total_avalanche_score'] += gamestats.stat_total_avalanche_score
             self.consolidated_result[current_key]['stat_total_possible_moves'] += gamestats.stat_total_possible_moves
             self.consolidated_result[current_key]['stat_game_init_time'] += gamestats.stat_game_init_time
             self.consolidated_result[current_key]['stat_game_move_time'] += gamestats.stat_game_move_time
@@ -38,12 +38,13 @@ class ExpStatus:
             'stat_game_score': gamestats.stat_game_score,
             'stat_total_deadlock_count': gamestats.stat_total_deadlock_count,
             'stat_total_avalanche_count': gamestats.stat_total_avalanche_count,
+            'stat_total_avalanche_score': gamestats.stat_total_avalanche_score,
             'stat_total_possible_moves': gamestats.stat_total_possible_moves,
             'stat_game_move_time':  gamestats.stat_game_move_time,
             'stat_game_init_time':  gamestats.stat_game_init_time
             }
 
-    #For a given grid size, over 20 moves, over 50 games with same board, repeated 200 times
+    #For a given grid size, over 10 moves, over 50 games with same board, repeated 200 times
 
     def pretty_print(self):
         print(f'Agent type {self.agent_type}')
@@ -98,7 +99,9 @@ class ExpStatus:
             fieldnames = ['Agent',
                           'Grid Size',
                           'Number of Colors',
-                          'Total score per Game Setting']
+                          'Total score per game',
+                          'Total avalanche matches per game',
+                          'Total avalanche score per game']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
             if not file_exists:
@@ -110,11 +113,10 @@ class ExpStatus:
                     'Agent': self.agent_type,
                     'Grid Size': key[0],
                     'Number of Colors': key[1],
-                    'Total score per Game Setting': self.consolidated_result[key]['stat_game_score']
+                    'Total score per game': self.consolidated_result[key]['stat_game_score'],
+                    'Total avalanche matches per game': self.consolidated_result[key]['stat_total_avalanche_count'],
+                    'Total avalanche score per game': self.consolidated_result[key]['stat_total_avalanche_score']
                 })
-
 
     def reinit_exp(self):
         self.consolidated_result = {}
-
-

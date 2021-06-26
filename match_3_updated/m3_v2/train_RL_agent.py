@@ -1,13 +1,10 @@
 import time
 import os
-
 import gym
 import numpy as np
-
 from sb3_contrib.common.maskable.policies import MaskableActorCriticPolicy
 from sb3_contrib.common.wrappers import ActionMasker
 from sb3_contrib.ppo_mask import MaskablePPO
-
 from m3_gym_env import MatchThreeEnv
 
 os.environ['KMP_DUPLICATE_LIB_OK']='True'

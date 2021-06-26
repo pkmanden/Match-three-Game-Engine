@@ -1,0 +1,11 @@
+Agent,Grid Size,Number of Colors,Total No. of Regenerations until valid board generation,Total No. of Times Matches Occurred during init,Total No. of Deadlocks during init,Total No. of Shuffles/Deadlocks Occurred,Total score per Game Setting,Total Valid Moves Made,Total No. of Possible/Playable Moves,Total No. of Avalanche Matches,Total Moves Available per Game Setting,Total deterministic score after first move,Total non-deterministic score after first move,Total avalanche count after first move
+random_agent,"(5, 5)",5,5,4,1,9,2429,500,2209,239,10,150,234,73
+random_agent,"(5, 5)",5,3,2,1,12,2577,500,2794,260,10,194,84,24
+random_agent,"(10, 10)",10,11,10,1,0,39,10,81,3,10,3,0,0
+random_agent,"(10, 10)",10,1,0,1,1,36,10,214,1,10,3,0,0
+random_agent,"(10, 10)",10,1,0,1,1,46,10,224,3,10,4,0,0
+random_agent,"(10, 10)",10,8,7,1,0,39,10,73,3,10,3,0,0
+random_agent,"(10, 10)",10,2,1,1,0,36,10,91,1,10,3,6,1
+random_agent,"(10, 10)",10,3,2,1,0,33,10,56,1,10,3,0,0
+random_agent,"(10, 10)",10,3,2,1,0,31,10,71,0,10,3,0,0
+random_agent,"(10, 10)",10,14,13,1,1,39,10,241,4,10,3,3,1
